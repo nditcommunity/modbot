@@ -27,12 +27,13 @@ jobs:
           ruby-version: '3.3.1'
           bundler-cache: true
       - name: Build API documentation
-        run: bundle exec yard doc --no-cache --output-dir "${{ runner.temp }}/pages-docs" 'app/**/*.rb'
+        run: bundle exec yard doc --no-cache --asset assets --output-dir "${{ runner.temp }}/pages-docs" 'app/**/*.rb'
       - name: Check generated documentation
         run: |
           test -s "${{ runner.temp }}/pages-docs/index.html"
           test -s "${{ runner.temp }}/pages-docs/_index.html"
           test -s "${{ runner.temp }}/pages-docs/SlackMessage.html"
+          cmp assets/ndit-bot.png "${{ runner.temp }}/pages-docs/assets/ndit-bot.png"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
         with:

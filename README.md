@@ -1,3 +1,5 @@
+<img src="assets/ndit-bot.png" align="right" width="180" alt="NDIT bot mascot">
+
 # NDIT Slack Bot
 
 A Rails application for the Neurodiversity in Tech Slack workspace. Members can contact moderators and join configured private channels from a slash command. Replies work in channels and direct messages.
@@ -130,7 +132,7 @@ For a targeted update, run `bundle update <gem-name>`, review the `Gemfile.lock`
 Generate a fresh local copy with YARD:
 
 ```sh
-bundle exec yard doc --no-cache --output-dir tmp/api-docs 'app/**/*.rb'
+bundle exec yard doc --no-cache --asset assets --output-dir tmp/api-docs 'app/**/*.rb'
 ```
 
 Open `tmp/api-docs/index.html` to view it. This output is gitignored.
