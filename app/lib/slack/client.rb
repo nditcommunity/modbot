@@ -3,6 +3,8 @@ module Slack
   class Client
     attr_reader :client
 
+    class RequestFailed < StandardError; end
+
     SUPPORT_CHANNEL = "<#C068YBHSJRW>"
 
     # Gives user ability to add themselves to a private channel
@@ -13,7 +15,7 @@ module Slack
     # @param client [Slack::Web::Client] the slack web client, defaults to nil
     def self.add_user_to_channel(user_id:, channel_id:, current_channel_name:, channel_name:, client: nil)
       client ||= default_client # if nil, set = to default
-      channel_name = channel_name.strip.delete_prefix("#").downcase.tr("-", "_").delete_prefix("intersection_").to_sym
+      channel_name = channel_name.to_s.strip.delete_prefix("#").downcase.tr("-", "_").delete_prefix("intersection_").to_sym
       begin
         if channel_name == :help
           post_ephemeral(
@@ -54,16 +56,7 @@ module Slack
           message: "Slack seems to think you are already in that channel! Please check your existing channel list for ##{channel_name}."
         )
       rescue => e
-        post_ephemeral(
-          channel_id: channel_id,
-          user_id: user_id,
-          channel_name: current_channel_name,
-          client: client,
-          message: "There was an error! Please check #{channel_name} against list in help.
-If it looks like a bug, please ask the mods for help in #{SUPPORT_CHANNEL}.
-#{e.message}"
-        )
-        raise
+        fail_safely(e, channel_id: channel_id, user_id: user_id, channel_name: current_channel_name, client: client)
       end
     end
 
@@ -132,17 +125,22 @@ If it looks like a bug, please ask the mods for help in #{SUPPORT_CHANNEL}.
           message: "Your message has been sent to the mods."
         )
       rescue => e
-        post_ephemeral(
-          channel_id: channel_id,
-          user_id: user_id,
-          channel_name: channel_name,
-          client: client,
-          message: "There was an error! Please ask the mods for help in #{SUPPORT_CHANNEL}.
-#{e.message}"
-        )
-        raise
+        fail_safely(e, channel_id: channel_id, user_id: user_id, channel_name: channel_name, client: client)
       end
     end
+
+    def self.fail_safely(error, **reply)
+      reference = SecureRandom.hex(8)
+      Rails.logger.error("Slack operation failed: #{error.class.name}; reference=#{reference}")
+      begin
+        post_ephemeral(**reply, message: "Something went wrong. Please ask the mods for help in #{SUPPORT_CHANNEL}. Reference: #{reference}.")
+      rescue => notification_error
+        Rails.logger.error("Slack error notification failed: #{notification_error.class.name}; reference=#{reference}")
+      end
+      # Do not pass the original message or cause into Rails/Sentry error reporting.
+      raise RequestFailed, "Slack operation failed; reference=#{reference}", cause: nil
+    end
+    private_class_method :fail_safely
 
     private_class_method
 

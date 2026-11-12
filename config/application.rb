@@ -1,6 +1,7 @@
 require_relative "boot"
 
 require "rails"
+require_relative "../lib/middleware/webhook_body_limit"
 require "active_job/railtie"
 require "action_controller/railtie"
 
@@ -23,5 +24,6 @@ module SlackPairs
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    config.middleware.insert_before 0, WebhookBodyLimit
   end
 end

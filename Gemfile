@@ -3,8 +3,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.3.1"
 
-gem "rails", "~> 7.0", ">= 7.0.4"
-gem "puma"
+gem "rails", "~> 7.1.0"
+gem "puma", "~> 7.2.1"
 gem "sentry-ruby"
 gem "sentry-rails"
 gem "slack-ruby-client"
@@ -14,6 +14,8 @@ group :development, :test do
   gem "dotenv-rails"
   gem "pry"
   gem "standard"
+  gem "bundler-audit", require: false
+  gem "brakeman", require: false
 end
 
 group :development do

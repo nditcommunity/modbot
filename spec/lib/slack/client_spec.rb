@@ -48,11 +48,14 @@ RSpec.describe Slack::Client do
 
     it "will error" do
       ENV["MOD_CHANNEL"] = "678"
-      error = StandardError.new("test")
+      error = StandardError.new("private-report https://example.test/private-response")
       message = SlackMessage.mod_message(user_id: "123", channel_id: "345", channel_name: "test", text: "something is awry")
       allow(client).to receive(:chat_postMessage).with(channel: "678", blocks: message).and_raise(error)
-      expect(client).to receive(:chat_postEphemeral).with(channel: "345", text: "There was an error! Please ask the mods for help in <#C068YBHSJRW>.\ntest", user: "123")
-      expect { Slack::Client.send_mod_message(user_id: "123", channel_id: "345", channel_name: "test", text: "something is awry", client: client) }.to raise_error(error)
+      expect(client).to receive(:chat_postEphemeral).with(channel: "345", text: /\ASomething went wrong\. Please ask the mods for help in <#C068YBHSJRW>\. Reference: [a-f0-9]{16}\.\z/, user: "123")
+      expect { Slack::Client.send_mod_message(user_id: "123", channel_id: "345", channel_name: "test", text: "something is awry", client: client) }.to raise_error(Slack::Client::RequestFailed) { |raised|
+                                                                                                                                                         expect(raised.cause).to be_nil
+                                                                                                                                                         expect(raised.message).not_to include("private-report", "private-response")
+                                                                                                                                                       }
     end
   end
 
@@ -195,7 +198,7 @@ RSpec.describe Slack::Client do
 
     it "lets the user know if there is a random error" do
       expect(client).to receive(:conversations_invite).with({channel: "C06V26ZBMQA", users: "1235"}).and_raise(Slack::Web::Api::Errors::ChannelCannotBeUnshared.new("oh no"))
-      expect(client).to receive(:chat_postEphemeral).with({channel: "6890", user: "1235", text: "There was an error! Please check bipoc against list in help.\nIf it looks like a bug, please ask the mods for help in <#C068YBHSJRW>.\noh no"})
+      expect(client).to receive(:chat_postEphemeral).with({channel: "6890", user: "1235", text: /\ASomething went wrong\. Please ask the mods for help in <#C068YBHSJRW>\. Reference: [a-f0-9]{16}\.\z/})
       expect {
         Slack::Client.add_user_to_channel(
           user_id: "1235",
@@ -204,7 +207,7 @@ RSpec.describe Slack::Client do
           channel_name: "BiPoc",
           client: client
         )
-      }.to raise_error(Slack::Web::Api::Errors::ChannelCannotBeUnshared)
+      }.to raise_error(Slack::Client::RequestFailed)
     end
   end
 end
