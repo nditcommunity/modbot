@@ -6,7 +6,7 @@
 <title>
   Class: Slack::Client
   
-    &mdash; Documentation by YARD 0.9.28
+    &mdash; Documentation by YARD 0.9.36
   
 </title>
 
@@ -151,7 +151,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#create_conversation-class_method" title="create_conversation (class method)">.<strong>create_conversation</strong>(group:, type:, message: nil)  &#x21d2; Object </a>
+      <a href="#add_user_to_channel-class_method" title="add_user_to_channel (class method)">.<strong>add_user_to_channel</strong>(user_id:, channel_id:, current_channel_name:, channel_name:, client: nil)  &#x21d2; Object </a>
     
 
     
@@ -166,7 +166,31 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Creates conversations for a group.</p>
+<p>Gives user ability to add themselves to a private channel.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#create_conversation-class_method" title="create_conversation (class method)">.<strong>create_conversation</strong>(group:, text: nil, message: nil, client: nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Opens a direct conversation and sends the supplied text or Block Kit message.</p>
 </div></span>
   
 </li>
@@ -197,7 +221,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#generate_message-class_method" title="generate_message (class method)">.<strong>generate_message</strong>(group:, type:, message: nil)  &#x21d2; JSON </a>
+      <a href="#post_ephemeral-class_method" title="post_ephemeral (class method)">.<strong>post_ephemeral</strong>(channel_id:, user_id:, channel_name:, client:, message: nil, blocks: nil)  &#x21d2; Object </a>
     
 
     
@@ -211,9 +235,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Given a group and a group type, returns the correct message.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -221,31 +243,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#get_channel_users-class_method" title="get_channel_users (class method)">.<strong>get_channel_users</strong>(channel_id:, client: nil)  &#x21d2; Array of Strings </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Gets users from a given channel.</p>
-</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#send_mod_message-class_method" title="send_mod_message (class method)">.<strong>send_mod_message</strong>(user_id:, channel_id:, text:)  &#x21d2; Object </a>
+      <a href="#send_mod_message-class_method" title="send_mod_message (class method)">.<strong>send_mod_message</strong>(user_id:, channel_id:, channel_name:, text:, client: nil)  &#x21d2; Object </a>
     
 
     
@@ -324,9 +322,9 @@
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="create_conversation-class_method">
+  <h3 class="signature first" id="add_user_to_channel-class_method">
   
-    .<strong>create_conversation</strong>(group:, type:, message: nil)  &#x21d2; <tt>Object</tt> 
+    .<strong>add_user_to_channel</strong>(user_id:, channel_id:, current_channel_name:, channel_name:, client: nil)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -335,7 +333,7 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Creates conversations for a group. Conversation must first be initialized and then the channel id for that conversation should get passed in to ‘postMessage`</p>
+<p>Gives user ability to add themselves to a private channel</p>
 
 
   </div>
@@ -346,267 +344,35 @@
   
     <li>
       
-        <span class='name'>group</span>
+        <span class='name'>channel_name</span>
       
       
-        <span class='type'>(<tt>Array of Strings</tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
         &mdash;
         <div class='inline'>
-<p>array of group users, ex: [“U1234”, “U2345”, “U3456”]</p>
+<p>text name of channel (ex: “_general”)</p>
 </div>
       
     </li>
   
     <li>
       
-        <span class='name'>type</span>
+        <span class='name'>user_id</span>
       
       
-        <span class='type'>(<tt>Symbol</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>type of conversation, currently handles :pairing and :groups</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>message</span>
-      
-      
-        <span class='type'>(<tt>JSON</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>can be passed in, must follow the Slack Block Kit format, defaults to nil</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-25
-26
-27
-28
-29
-30
-31
-32
-33</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 25</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_conversation'>create_conversation</span><span class='lparen'>(</span><span class='label'>group:</span><span class='comma'>,</span> <span class='label'>type:</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_message'>message</span> <span class='op'>=</span> <span class='id identifier rubyid_generate_message'>generate_message</span><span class='lparen'>(</span><span class='label'>group:</span> <span class='id identifier rubyid_group'>group</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='id identifier rubyid_message'>message</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_client'>client</span> <span class='op'>||=</span> <span class='id identifier rubyid_default_client'>default_client</span>
-  <span class='id identifier rubyid_conv'>conv</span> <span class='op'>=</span> <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_conversations_open'>conversations_open</span><span class='lparen'>(</span><span class='label'>users:</span> <span class='id identifier rubyid_group'>group</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>,</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_chat_postMessage'>chat_postMessage</span><span class='lparen'>(</span>
-    <span class='label'>channel:</span> <span class='id identifier rubyid_conv'>conv</span><span class='period'>.</span><span class='id identifier rubyid_channel'>channel</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span>
-    <span class='label'>blocks:</span> <span class='id identifier rubyid_message'>message</span>
-  <span class='rparen'>)</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="default_client-class_method">
-  
-    .<strong>default_client</strong>  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-67
-68
-69</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 67</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_default_client'>default_client</span>
-  <span class='op'>::</span><span class='const'><span class='object_link'><a href="../Slack.html" title="Slack (module)">Slack</a></span></span><span class='op'>::</span><span class='const'>Web</span><span class='op'>::</span><span class='const'>Client</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='label'>token:</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>SLACK_OAUTH_TOKEN</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="generate_message-class_method">
-  
-    .<strong>generate_message</strong>(group:, type:, message: nil)  &#x21d2; <tt>JSON</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Given a group and a group type, returns the correct message</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
-  
-    <li>
-      
-        <span class='name'>group</span>
-      
-      
-        <span class='type'>(<tt>Array of Strings</tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
         &mdash;
         <div class='inline'>
-<p>array of group users, ex: [“U1234”, “U2345”, “U3456”]</p>
+<p>slack user id of user who sent the message</p>
 </div>
       
     </li>
-  
-    <li>
-      
-        <span class='name'>type</span>
-      
-      
-        <span class='type'>(<tt>Symbol</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>type of conversation, currently handles :pairing and :groups</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>message</span>
-      
-      
-        <span class='type'>(<tt>JSON</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>can be passed in, must follow the Slack Block Kit format, defaults to nil</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>JSON</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>message following the Slack Block Kit format</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 56</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_generate_message'>generate_message</span><span class='lparen'>(</span><span class='label'>group:</span><span class='comma'>,</span> <span class='label'>type:</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='kw'>case</span> <span class='id identifier rubyid_type'>type</span>
-  <span class='kw'>when</span> <span class='symbol'>:pairing</span>
-    <span class='const'><span class='object_link'><a href="../SlackMessage.html" title="SlackMessage (module)">SlackMessage</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pair_message'><span class='object_link'><a href="../SlackMessage.html#pair_message-class_method" title="SlackMessage.pair_message (method)">pair_message</a></span></span><span class='lparen'>(</span><span class='label'>pair:</span> <span class='id identifier rubyid_group'>group</span><span class='rparen'>)</span>
-  <span class='kw'>when</span> <span class='symbol'>:groups</span>
-    <span class='const'><span class='object_link'><a href="../SlackMessage.html" title="SlackMessage (module)">SlackMessage</a></span></span><span class='period'>.</span><span class='id identifier rubyid_groups_message'>groups_message</span><span class='lparen'>(</span><span class='label'>group:</span> <span class='id identifier rubyid_group'>group</span><span class='rparen'>)</span>
-  <span class='kw'>else</span>
-    <span class='id identifier rubyid_message'>message</span>
-  <span class='kw'>end</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="get_channel_users-class_method">
-  
-    .<strong>get_channel_users</strong>(channel_id:, client: nil)  &#x21d2; <tt>Array of Strings</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Gets users from a given channel</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
     <li>
       
@@ -644,10 +410,156 @@
   
 </ul>
 
-<p class="tag_title">Returns:</p>
-<ul class="return">
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_add_user_to_channel'>add_user_to_channel</span><span class='lparen'>(</span><span class='label'>user_id:</span><span class='comma'>,</span> <span class='label'>channel_id:</span><span class='comma'>,</span> <span class='label'>current_channel_name:</span><span class='comma'>,</span> <span class='label'>channel_name:</span><span class='comma'>,</span> <span class='label'>client:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_client'>client</span> <span class='op'>||=</span> <span class='id identifier rubyid_default_client'>default_client</span> <span class='comment'># if nil, set = to default
+</span>  <span class='id identifier rubyid_channel_name'>channel_name</span> <span class='op'>=</span> <span class='id identifier rubyid_channel_name'>channel_name</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span><span class='period'>.</span><span class='id identifier rubyid_sub'>sub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>_</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
+  <span class='kw'>begin</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_channel_name'>channel_name</span> <span class='op'>==</span> <span class='symbol'>:help</span>
+      <span class='id identifier rubyid_post_ephemeral'>post_ephemeral</span><span class='lparen'>(</span>
+        <span class='label'>channel_id:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span>
+        <span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span>
+        <span class='label'>channel_name:</span> <span class='id identifier rubyid_current_channel_name'>current_channel_name</span><span class='comma'>,</span>
+        <span class='label'>client:</span> <span class='id identifier rubyid_client'>client</span><span class='comma'>,</span>
+        <span class='label'>blocks:</span> <span class='const'><span class='object_link'><a href="../SlackMessage.html" title="SlackMessage (module)">SlackMessage</a></span></span><span class='period'>.</span><span class='id identifier rubyid_help_message'><span class='object_link'><a href="../SlackMessage.html#help_message-class_method" title="SlackMessage.help_message (method)">help_message</a></span></span>
+      <span class='rparen'>)</span>
+    <span class='kw'>elsif</span> <span class='const'><span class='object_link'><a href="../SlackMessage.html" title="SlackMessage (module)">SlackMessage</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../SlackMessage.html#CHANNELS-constant" title="SlackMessage::CHANNELS (constant)">CHANNELS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span> <span class='id identifier rubyid_channel_name'>channel_name</span>
+      <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_conversations_invite'>conversations_invite</span><span class='lparen'>(</span>
+        <span class='label'>channel:</span> <span class='const'><span class='object_link'><a href="../SlackMessage.html" title="SlackMessage (module)">SlackMessage</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../SlackMessage.html#CHANNELS-constant" title="SlackMessage::CHANNELS (constant)">CHANNELS</a></span></span><span class='lbracket'>[</span><span class='id identifier rubyid_channel_name'>channel_name</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:channel_id</span><span class='rbracket'>]</span><span class='comma'>,</span>
+        <span class='label'>users:</span> <span class='id identifier rubyid_user_id'>user_id</span>
+      <span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_post_ephemeral'>post_ephemeral</span><span class='lparen'>(</span>
+        <span class='label'>channel_id:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span>
+        <span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span>
+        <span class='label'>channel_name:</span> <span class='id identifier rubyid_current_channel_name'>current_channel_name</span><span class='comma'>,</span>
+        <span class='label'>client:</span> <span class='id identifier rubyid_client'>client</span><span class='comma'>,</span>
+        <span class='label'>message:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>I could not find that channel. Please check the name against \&quot;help\&quot;.</span><span class='tstring_end'>&quot;</span></span>
+      <span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>rescue</span> <span class='const'><span class='object_link'><a href="../Slack.html" title="Slack (module)">Slack</a></span></span><span class='op'>::</span><span class='const'>Web</span><span class='op'>::</span><span class='const'>Api</span><span class='op'>::</span><span class='const'>Errors</span><span class='op'>::</span><span class='const'>ChannelNotFound</span>
+    <span class='id identifier rubyid_post_ephemeral'>post_ephemeral</span><span class='lparen'>(</span>
+      <span class='label'>channel_id:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span>
+      <span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span>
+      <span class='label'>channel_name:</span> <span class='id identifier rubyid_current_channel_name'>current_channel_name</span><span class='comma'>,</span>
+      <span class='label'>client:</span> <span class='id identifier rubyid_client'>client</span><span class='comma'>,</span>
+      <span class='label'>message:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>I could not find that channel. Please check the name against \&quot;help\&quot; or contact Jennifer with channel name: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_channel_name'>channel_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>.</span><span class='tstring_end'>&quot;</span></span>
+    <span class='rparen'>)</span>
+  <span class='kw'>rescue</span> <span class='const'><span class='object_link'><a href="../Slack.html" title="Slack (module)">Slack</a></span></span><span class='op'>::</span><span class='const'>Web</span><span class='op'>::</span><span class='const'>Api</span><span class='op'>::</span><span class='const'>Errors</span><span class='op'>::</span><span class='const'>AlreadyInChannel</span>
+    <span class='id identifier rubyid_post_ephemeral'>post_ephemeral</span><span class='lparen'>(</span>
+      <span class='label'>channel_id:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span>
+      <span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span>
+      <span class='label'>channel_name:</span> <span class='id identifier rubyid_current_channel_name'>current_channel_name</span><span class='comma'>,</span>
+      <span class='label'>client:</span> <span class='id identifier rubyid_client'>client</span><span class='comma'>,</span>
+      <span class='label'>message:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Slack seems to think you are already in that channel! Please check your existing channel list for #</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_channel_name'>channel_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>.</span><span class='tstring_end'>&quot;</span></span>
+    <span class='rparen'>)</span>
+  <span class='kw'>rescue</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+    <span class='id identifier rubyid_post_ephemeral'>post_ephemeral</span><span class='lparen'>(</span>
+      <span class='label'>channel_id:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span>
+      <span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span>
+      <span class='label'>channel_name:</span> <span class='id identifier rubyid_current_channel_name'>current_channel_name</span><span class='comma'>,</span>
+      <span class='label'>client:</span> <span class='id identifier rubyid_client'>client</span><span class='comma'>,</span>
+      <span class='label'>message:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>There was an error! Please check </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_channel_name'>channel_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> against list in help.
+If it looks like a bug, please copy and send this message to Jennifer Konikowski:
+</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='rparen'>)</span>
+    <span class='id identifier rubyid_raise'>raise</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="create_conversation-class_method">
+  
+    .<strong>create_conversation</strong>(group:, text: nil, message: nil, client: nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Opens a direct conversation and sends the supplied text or Block Kit message</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
     <li>
+      
+        <span class='name'>group</span>
       
       
         <span class='type'>(<tt>Array of Strings</tt>)</span>
@@ -656,12 +568,31 @@
       
         &mdash;
         <div class='inline'>
-<p>array of channel users, ex: [“U1234”, “U2345”, “U3456”]</p>
+<p>array of group users, ex: [“U1234”, “U2345”, “U3456”]</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>message</span>
+      
+      
+        <span class='type'>(<tt>JSON</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>can be passed in, must follow the Slack Block Kit format, defaults to nil</p>
 </div>
       
     </li>
   
 </ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -669,26 +600,130 @@
       <pre class="lines">
 
 
-11
-12
-13
-14
-15
-16
-17
-18</pre>
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 11</span>
+      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 91</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_get_channel_users'>get_channel_users</span><span class='lparen'>(</span><span class='label'>channel_id:</span><span class='comma'>,</span> <span class='label'>client:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_client'>client</span> <span class='op'>||=</span> <span class='id identifier rubyid_default_client'>default_client</span> <span class='comment'># if nil, set = to default
-</span>  <span class='id identifier rubyid_members'>members</span> <span class='op'>=</span> <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_conversations_members'>conversations_members</span><span class='lparen'>(</span>
-    <span class='label'>channel:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span>
-    <span class='label'>limit:</span> <span class='int'>10_000</span>
-  <span class='rparen'>)</span>
-  <span class='id identifier rubyid_members'>members</span><span class='period'>.</span><span class='id identifier rubyid_members'>members</span><span class='period'>.</span><span class='id identifier rubyid_reject'>reject</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_m'>m</span><span class='op'>|</span> <span class='id identifier rubyid_m'>m</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>U02F2U3RQKS</span><span class='tstring_end'>&quot;</span></span> <span class='rbrace'>}</span> <span class='comment'># reject channitor!
-</span><span class='kw'>end</span></pre>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_conversation'>create_conversation</span><span class='lparen'>(</span><span class='label'>group:</span><span class='comma'>,</span> <span class='label'>text:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>client:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_client'>client</span> <span class='op'>||=</span> <span class='id identifier rubyid_default_client'>default_client</span>
+  <span class='id identifier rubyid_conv'>conv</span> <span class='op'>=</span> <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_conversations_open'>conversations_open</span><span class='lparen'>(</span><span class='label'>users:</span> <span class='id identifier rubyid_group'>group</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>,</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_text'>text</span>
+    <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_chat_postMessage'>chat_postMessage</span><span class='lparen'>(</span>
+      <span class='label'>channel:</span> <span class='id identifier rubyid_conv'>conv</span><span class='period'>.</span><span class='id identifier rubyid_channel'>channel</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span>
+      <span class='label'>text:</span> <span class='id identifier rubyid_text'>text</span>
+    <span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_chat_postMessage'>chat_postMessage</span><span class='lparen'>(</span>
+      <span class='label'>channel:</span> <span class='id identifier rubyid_conv'>conv</span><span class='period'>.</span><span class='id identifier rubyid_channel'>channel</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span>
+      <span class='label'>blocks:</span> <span class='id identifier rubyid_message'>message</span>
+    <span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="default_client-class_method">
+  
+    .<strong>default_client</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+147
+148
+149</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 147</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_default_client'>default_client</span>
+  <span class='op'>::</span><span class='const'><span class='object_link'><a href="../Slack.html" title="Slack (module)">Slack</a></span></span><span class='op'>::</span><span class='const'>Web</span><span class='op'>::</span><span class='const'>Client</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='label'>token:</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>SLACK_OAUTH_TOKEN</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="post_ephemeral-class_method">
+  
+    .<strong>post_ephemeral</strong>(channel_id:, user_id:, channel_name:, client:, message: nil, blocks: nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 68</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_post_ephemeral'>post_ephemeral</span><span class='lparen'>(</span><span class='label'>channel_id:</span><span class='comma'>,</span> <span class='label'>user_id:</span><span class='comma'>,</span> <span class='label'>channel_name:</span><span class='comma'>,</span> <span class='label'>client:</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>blocks:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_channel_name'>channel_name</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>directmessage</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_create_conversation'>create_conversation</span><span class='lparen'>(</span><span class='label'>group:</span> <span class='lbracket'>[</span><span class='id identifier rubyid_user_id'>user_id</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>text:</span> <span class='id identifier rubyid_message'>message</span><span class='comma'>,</span> <span class='label'>client:</span> <span class='id identifier rubyid_client'>client</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_message'>message</span>
+    <span class='id identifier rubyid_create_conversation'>create_conversation</span><span class='lparen'>(</span><span class='label'>group:</span> <span class='lbracket'>[</span><span class='id identifier rubyid_user_id'>user_id</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='id identifier rubyid_blocks'>blocks</span><span class='comma'>,</span> <span class='label'>client:</span> <span class='id identifier rubyid_client'>client</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_blocks'>blocks</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_message'>message</span>
+    <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_chat_postEphemeral'>chat_postEphemeral</span><span class='lparen'>(</span>
+      <span class='label'>channel:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span>
+      <span class='label'>user:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span>
+      <span class='label'>text:</span> <span class='id identifier rubyid_message'>message</span>
+    <span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_chat_postEphemeral'>chat_postEphemeral</span><span class='lparen'>(</span>
+      <span class='label'>channel:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span>
+      <span class='label'>user:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span>
+      <span class='label'>blocks:</span> <span class='id identifier rubyid_blocks'>blocks</span>
+    <span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -697,7 +732,7 @@
       <div class="method_details ">
   <h3 class="signature " id="send_mod_message-class_method">
   
-    .<strong>send_mod_message</strong>(user_id:, channel_id:, text:)  &#x21d2; <tt>Object</tt> 
+    .<strong>send_mod_message</strong>(user_id:, channel_id:, channel_name:, text:, client: nil)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -749,6 +784,22 @@
   
     <li>
       
+        <span class='name'>channel_name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>slack channel name where user initially reached out to /mods</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
         <span class='name'>text</span>
       
       
@@ -772,23 +823,71 @@
       <pre class="lines">
 
 
-40
-41
-42
-43
-44
-45
-46</pre>
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 113</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_send_mod_message'>send_mod_message</span><span class='lparen'>(</span><span class='label'>user_id:</span><span class='comma'>,</span> <span class='label'>channel_id:</span><span class='comma'>,</span> <span class='label'>text:</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_send_mod_message'>send_mod_message</span><span class='lparen'>(</span><span class='label'>user_id:</span><span class='comma'>,</span> <span class='label'>channel_id:</span><span class='comma'>,</span> <span class='label'>channel_name:</span><span class='comma'>,</span> <span class='label'>text:</span><span class='comma'>,</span> <span class='label'>client:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_client'>client</span> <span class='op'>||=</span> <span class='id identifier rubyid_default_client'>default_client</span>
-  <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_chat_postMessage'>chat_postMessage</span><span class='lparen'>(</span>
-    <span class='label'>channel:</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>MOD_CHANNEL</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='comma'>,</span>
-    <span class='label'>blocks:</span> <span class='const'><span class='object_link'><a href="../SlackMessage.html" title="SlackMessage (module)">SlackMessage</a></span></span><span class='period'>.</span><span class='id identifier rubyid_mod_message'><span class='object_link'><a href="../SlackMessage.html#mod_message-class_method" title="SlackMessage.mod_message (method)">mod_message</a></span></span><span class='lparen'>(</span><span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span> <span class='label'>channel_id:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span> <span class='label'>text:</span> <span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span>
-  <span class='rparen'>)</span>
+  <span class='kw'>begin</span>
+    <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_chat_postMessage'>chat_postMessage</span><span class='lparen'>(</span>
+      <span class='label'>channel:</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>MOD_CHANNEL</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='comma'>,</span>
+      <span class='label'>blocks:</span> <span class='const'><span class='object_link'><a href="../SlackMessage.html" title="SlackMessage (module)">SlackMessage</a></span></span><span class='period'>.</span><span class='id identifier rubyid_mod_message'><span class='object_link'><a href="../SlackMessage.html#mod_message-class_method" title="SlackMessage.mod_message (method)">mod_message</a></span></span><span class='lparen'>(</span>
+        <span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span>
+        <span class='label'>channel_id:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span>
+        <span class='label'>channel_name:</span> <span class='id identifier rubyid_channel_name'>channel_name</span><span class='comma'>,</span>
+        <span class='label'>text:</span> <span class='id identifier rubyid_text'>text</span>
+      <span class='rparen'>)</span>
+    <span class='rparen'>)</span>
+    <span class='id identifier rubyid_post_ephemeral'>post_ephemeral</span><span class='lparen'>(</span>
+      <span class='label'>channel_id:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span>
+      <span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span>
+      <span class='label'>channel_name:</span> <span class='id identifier rubyid_channel_name'>channel_name</span><span class='comma'>,</span>
+      <span class='label'>client:</span> <span class='id identifier rubyid_client'>client</span><span class='comma'>,</span>
+      <span class='label'>message:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Your message has been sent to the mods.</span><span class='tstring_end'>&quot;</span></span>
+    <span class='rparen'>)</span>
+  <span class='kw'>rescue</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+    <span class='id identifier rubyid_post_ephemeral'>post_ephemeral</span><span class='lparen'>(</span>
+      <span class='label'>channel_id:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span>
+      <span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span>
+      <span class='label'>channel_name:</span> <span class='id identifier rubyid_channel_name'>channel_name</span><span class='comma'>,</span>
+      <span class='label'>client:</span> <span class='id identifier rubyid_client'>client</span><span class='comma'>,</span>
+      <span class='label'>message:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>There was an error! Please copy and send this message to Jennifer:
+</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='rparen'>)</span>
+    <span class='id identifier rubyid_raise'>raise</span>
+  <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -800,9 +899,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 14 13:11:42 2022 by
+  Generated on Wed Nov 11 18:23:43 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.28 (ruby-3.1.3).
+  0.9.36 (ruby-3.3.1).
 </div>
 
     </div>

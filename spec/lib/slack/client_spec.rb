@@ -4,15 +4,21 @@ RSpec.describe Slack::Client do
   context "create conversations" do
     let(:client) { double(Slack::Web::Client) }
 
-    it "creates a pairing conversation" do
-      conversation = OpenStruct.new
-      channel = OpenStruct.new
-      channel.id = 2
-      conversation.channel = channel
-      expected_message = SlackMessage.pair_message(pair: ["123", "456"])
-      allow(client).to receive(:conversations_open).with(users: "123,456").and_return(conversation)
-      allow(client).to receive(:chat_postMessage).with(channel: 2, blocks: expected_message)
-      Slack::Client.create_conversation(group: ["123", "456"], type: :pairing, client: client)
+    it "sends supplied message blocks in a direct conversation" do
+      conversation = OpenStruct.new(channel: OpenStruct.new(id: "D123"))
+      message = SlackMessage.help_message
+      expect(client).to receive(:conversations_open).with(users: "123").and_return(conversation)
+      expect(client).to receive(:chat_postMessage).with(channel: "D123", blocks: message)
+
+      Slack::Client.create_conversation(group: ["123"], message: message, client: client)
+    end
+
+    it "sends supplied text in a direct conversation" do
+      conversation = OpenStruct.new(channel: OpenStruct.new(id: "D123"))
+      expect(client).to receive(:conversations_open).with(users: "123").and_return(conversation)
+      expect(client).to receive(:chat_postMessage).with(channel: "D123", text: "Your message has been sent to the mods.")
+
+      Slack::Client.create_conversation(group: ["123"], text: "Your message has been sent to the mods.", client: client)
     end
   end
 

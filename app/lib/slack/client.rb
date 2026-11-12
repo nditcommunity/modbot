@@ -67,8 +67,8 @@ If it looks like a bug, please copy and send this message to Jennifer Konikowski
 
     def self.post_ephemeral(channel_id:, user_id:, channel_name:, client:, message: nil, blocks: nil)
       if channel_name == "directmessage"
-        create_conversation(group: [user_id], text: message, type: :dm, client: client) if message
-        create_conversation(group: [user_id], message: blocks, type: :dm, client: client) if blocks
+        create_conversation(group: [user_id], text: message, client: client) if message
+        create_conversation(group: [user_id], message: blocks, client: client) if blocks
       elsif message
         client.chat_postEphemeral(
           channel: channel_id,
@@ -84,25 +84,11 @@ If it looks like a bug, please copy and send this message to Jennifer Konikowski
       end
     end
 
-    # Gets users from a given channel
-    #
-    # @param channel_id [String] ID of the channel, ex: "C182938", found by looking at the URL when viewing a channel through a browser
-    # @param client [Slack::Web::Client] the slack web client, defaults to nil
-    # @return [Array of Strings] array of channel users, ex: ["U1234", "U2345", "U3456"]
-    def self.get_channel_users(channel_id:, client: nil)
-      client ||= default_client # if nil, set = to default
-      client.conversations_members(
-        channel: channel_id,
-        limit: 10_000
-      )
-    end
-
-    # Creates conversations for a group. Conversation must first be initialized and then the channel id for that conversation should get passed in to `postMessage`
+    # Opens a direct conversation and sends the supplied text or Block Kit message
     #
     # @param group [Array of Strings] array of group users, ex: ["U1234", "U2345", "U3456"]
-    # @param type [Symbol] type of conversation, currently handles :pairing and :groups
     # @param message [JSON] can be passed in, must follow the Slack Block Kit format, defaults to nil
-    def self.create_conversation(group:, type:, text: nil, message: nil, client: nil)
+    def self.create_conversation(group:, text: nil, message: nil, client: nil)
       client ||= default_client
       conv = client.conversations_open(users: group.join(","))
       if text
@@ -111,7 +97,6 @@ If it looks like a bug, please copy and send this message to Jennifer Konikowski
           text: text
         )
       else
-        message = generate_message(group: group, type: type, message: message)
         client.chat_postMessage(
           channel: conv.channel.id,
           blocks: message
@@ -158,23 +143,6 @@ If it looks like a bug, please copy and send this message to Jennifer Konikowski
     end
 
     private_class_method
-
-    # Given a group and a group type, returns the correct message
-    #
-    # @param group [Array of Strings] array of group users, ex: ["U1234", "U2345", "U3456"]
-    # @param type [Symbol] type of conversation, currently handles :pairing and :groups
-    # @param message [JSON] can be passed in, must follow the Slack Block Kit format, defaults to nil
-    # @return [JSON] message following the Slack Block Kit format
-    def self.generate_message(group:, type:, message: nil)
-      case type
-      when :pairing
-        SlackMessage.pair_message(pair: group)
-      when :groups
-        SlackMessage.group_message(group: group)
-      else
-        message
-      end
-    end
 
     def self.default_client
       ::Slack::Web::Client.new(token: ENV["SLACK_OAUTH_TOKEN"])
