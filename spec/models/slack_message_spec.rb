@@ -1,23 +1,6 @@
 require "rails_helper"
 
 RSpec.describe SlackMessage do
-  it "generates pair message" do
-    ENV["PAIRING_CHANNEL"] = "C123"
-    message = SlackMessage.pair_message(pair: ["123", "456"])
-    expected_message = [
-      {
-        type: "section",
-        block_id: "pair_introduction",
-        text: {
-          type: "mrkdwn",
-          text: ":wave: Hi <@123> and <@456>! You've both been paired up for a coffee chat from <#C123>! Find a time to meet (Calendly is great for this) and have fun!"
-        }
-      }
-    ]
-
-    expect(message).to eq expected_message
-  end
-
   it "generates mod message" do
     message = SlackMessage.mod_message(user_id: "U123", channel_id: "C123", channel_name: "fun_times", text: "something not great happened.")
     expected_message = [

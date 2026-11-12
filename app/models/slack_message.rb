@@ -38,24 +38,6 @@ module SlackMessage
     ]
   end
 
-  # Generates the pair message for a pair of users
-  #
-  # @param pair [Array of Arrays of Strings] pairs of users, ex: [["U1234", "U2345"], ["U3456", "U4567"]]
-  # @return [JSON] message content fitting Slack's block kit requirements
-  def pair_message(pair:)
-    pair_usernames = pair.map { |user| "<@#{user}>" }.to_sentence
-    [
-      {
-        type: "section",
-        block_id: "pair_introduction",
-        text: {
-          type: "mrkdwn",
-          text: ":wave: Hi #{pair_usernames}! You've both been paired up for a coffee chat from <##{ENV["PAIRING_CHANNEL"]}>! Find a time to meet (Calendly is great for this) and have fun!"
-        }
-      }
-    ]
-  end
-
   # Generates a message to the mod channel
   #
   # @param user_id [String] slack user id of user sending message to mods
