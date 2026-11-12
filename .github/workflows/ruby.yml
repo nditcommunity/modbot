@@ -43,7 +43,8 @@ jobs:
       env:
         RAILS_ENV: test
     - name: Check production boot
-      run: bundle exec rails runner 'puts "Rails #{Rails.version} production boot passed"'
+      run: |
+        bundle exec rails runner 'puts "Rails #{Rails.version} production boot passed"'
       env:
         RAILS_ENV: production
         SECRET_KEY_BASE: synthetic-ci-secret-key-base
