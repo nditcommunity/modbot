@@ -1,74 +1,140 @@
 # NDIT Slack Bot
 
-This application lets Slack members send messages to moderators and add themselves to configured private channels. Replies work in channels and direct messages.
+A Rails application for the Neurodiversity in Tech Slack workspace. Members can contact moderators and join configured private channels from a slash command. Replies work in channels and direct messages.
 
-## System Requirements
+## Commands
 
-**NOTE: if you want to use a version manager, please skip to the next section. Using a version manager is highly recommended.**
+- `/mods <message>` sends a report to the moderator channel and confirms delivery to the member.
+- `/add-to-channel help` lists the private channels available through the bot.
+- `/add-to-channel <name>` invites the member to a configured private channel.
 
-This application uses [Ruby 3.3.1](https://www.ruby-lang.org/en/documentation/installation/). You'll need the following
-- [RubyGems](https://rubygems.org/pages/download) (installed with rvm)
-- bundler (`gem install bundler`)
-- required libraries (run `bundle install` from the application home directory)
+The current channel arguments are:
 
-### If you want to use a version manager
+- `bipoc`: for anyone who identifies as BIPOC.
+- `women-nonbinary`: for women and nonbinary people.
+- `queer`: for LGBTQIA+ folks.
 
-You can use either [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io). Further instructions assume use of rvm.
-1. Install rvm.
-2. `rvm install ruby-3.3.1`
-3. `cd` into the `slack-bot` directory
-4. This should create a `slack-bot` gemset (a self-contained set of installed gems to avoid conflicts).
-5. `gem install bundler`
-6. `bundle install`
-7. You are good to go!
+Arguments also accept underscores, the `intersection-` prefix, and an optional leading `#`. For example, `women_nonbinary` and `#intersection-women-nonbinary` select the same channel. Updating the configuration does not rename or archive Slack channels.
 
-## Running Locally
+## Requirements
 
-You need four environment variables set:
+- [Ruby 3.3.1](https://www.ruby-lang.org/en/documentation/installation/), as specified in `.ruby-version` and `Gemfile`.
+- Bundler and the dependencies in `Gemfile.lock`.
+- Rails 8.1.4.1 or a newer compatible 8.1 patch release, installed by Bundler.
+- A Slack app and workspace for integration testing or deployment.
 
-1. `SLACK_OAUTH_TOKEN`
-2. `SLACK_SIGNING_SECRET`
-3. `SECRET_KEY_BASE`
-4. `MOD_CHANNEL`
+A Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv) or [RVM](https://rvm.io) is recommended. With RVM:
 
-Get the moderator channel ID by opening the channel in Slack in a browser and looking at the URL. Get the bot token and signing secret from your Slack app settings. Once these are set, start the web application:
+```sh
+rvm install ruby-3.3.1
+cd slack-bot
+rvm use ruby-3.3.1@slack-bot --create
+gem install bundler
+bundle install
+```
 
-`bundle exec rails server`
+The repository's `.ruby-gemset` uses `slack-bot`. Run `bundle install` in that gemset even if dependencies were previously installed in another one. With another version manager, select Ruby 3.3.1 and run the same Bundler commands from the repository root.
 
-The app handles Slack slash-command requests. Requests that send messages or invite members affect the configured workspace, so use a test workspace for manual testing.
+## Configuration
 
-## Running tests
+Set these environment variables in your local environment or hosting service:
 
-`bundle exec rspec`
-That's it!
+| Variable | Purpose |
+| --- | --- |
+| `SLACK_OAUTH_TOKEN` | Bot user OAuth token for the installed Slack app. The runtime client explicitly uses this token. |
+| `SLACK_SIGNING_SECRET` | Signing secret from the Slack app's Basic Information page. Required for signed requests; production will not start without it. |
+| `SECRET_KEY_BASE` | Rails secret key base. Generate a value with `bundle exec rails secret`. |
+| `MOD_CHANNEL` | ID of the channel that receives moderator reports. |
 
-## Running the linter
+For local development, `dotenv-rails` can load these from a gitignored `.env` file. Do not commit credentials. A channel ID can be found in Slack's channel details or its browser URL.
 
-`bundle exec standardrb --fix`
+### Workspace-specific settings
 
-## Deploying to Slack
+Before using this application in another workspace, review:
 
-1. Follow instructions and [create a new slack app](https://api.slack.com/authentication/basics)
-2. Add the following Bot Token scopes to your slack app: `users:read`, `im:write`, `chat:write`, `channels:join`, `channels:manage`, `groups:write`, `groups:read`, `im:read`, and `channels:read`. *OR* copy `.slack_manifest.yml` and update the app name.
-3. Create a new app in Heroku or your hosting service of choice. Set `SECRET_KEY_BASE`, `SLACK_OAUTH_TOKEN`, `SLACK_SIGNING_SECRET`, and `MOD_CHANNEL` as environment variables.
-4. Deploy the app.
-5. Go to your app in Slack, then to slash commands, and create the moderator command:
+- [`SlackMessage::CHANNELS`](app/models/slack_message.rb): private-channel IDs and descriptions used for invitations and help text.
+- [`Slack::Client::SUPPORT_CHANNEL`](app/lib/slack/client.rb): the channel link in error messages, currently NDIT's `#ndit-meta`.
+- [`config/initializers/sentry.rb`](config/initializers/sentry.rb): the production Sentry destination and sampling configuration. Replace or remove the existing project destination before deploying a fork. Production tracing currently samples all transactions; development and test reports are disabled.
 
-- Command: `/mods`
-- Request URL: `https://your-app.herokuapp.com/mod`
-- Short Description: `Notifies the mods channel`
-- Usage Hint: `<message to mods>`
+## Running locally
 
-For private-channel access, point a slash command at `https://your-app.herokuapp.com/channels`. Members can pass `help` to see available channels or a channel name to join. Configure channel IDs and descriptions in `SlackMessage::CHANNELS`.
+Install dependencies, configure the environment, then start the application:
 
-The available channel arguments are `bipoc`, `women-nonbinary`, and `queer`. The `women-nonbinary` option uses the shared women/nonbinary channel ID. Updating this list does not rename or archive Slack channels. Channel arguments also accept underscores, the `intersection-` prefix, and an optional leading `#`.
+```sh
+bundle exec rails server
+```
 
-## Updating the gems
+The server runs at `http://localhost:3000`. Slack must reach a public HTTPS URL for live slash-command testing. Use a separate test workspace and test channels: requests that send messages or invite members change the configured workspace.
 
-Dependabot is turned on, but if you want to do it manually, run:
+## Installing and deploying the Slack app
 
-`bundle update`
+1. [Create a Slack app](https://api.slack.com/apps). Use [`.slack_manifest.yml`](.slack_manifest.yml) as a starting point, updating its name for your workspace.
+2. Review OAuth scopes. The manifest currently includes `users:read`, `im:write`, `chat:write`, `channels:join`, `channels:manage`, `groups:write`, `groups:read`, `im:read`, and `channels:read`. It does not include `commands` or define the slash commands. Add the slash-command capability and configure both commands below in the app settings. These existing scopes are not a validated minimum; see the [permission review](SECURITY.md#slack-permission-review) before changing installed grants.
+3. Install the app to the intended workspace and use its bot user OAuth token for `SLACK_OAUTH_TOKEN`. Reinstall it if approved scope changes require new grants.
+4. Add the bot to the moderator channel and each private channel it is configured to invite members to. An account's membership does not give the bot membership.
+5. Deploy the Rails application to Heroku or another Ruby-compatible host. Set the four environment variables above, use `RAILS_ENV=production`, and expose the application over HTTPS.
+6. Configure these slash commands, replacing the example host with your application's public URL:
 
-## Updating the documentation
+| Command | Request URL | Description | Usage hint |
+| --- | --- | --- | --- |
+| `/mods` | `https://your-app.example/mod` | Send a message to the moderators | `<message to mods>` |
+| `/add-to-channel` | `https://your-app.example/channels` | Join a private channel | `help or <channel name>` |
 
-Regenerate the API documentation with `bundle exec yard doc 'app/**/*.rb'`. The generated `doc` directory is published by the Pages workflow.
+7. Run the checks below and test `/mods`, private-channel help, an allowed join, an unknown channel, and replies from a direct message in the test workspace. Confirm that the report reaches the intended moderator channel and that invitations target the configured private channels.
+
+The GitHub Pages workflow publishes API documentation only. It does not deploy the running Slack bot.
+
+## Security behavior
+
+- Slack webhook signatures are verified against the exact request body. Missing, invalid, or expired signatures return `403`.
+- POST bodies larger than 64 KiB return `413`, including URL-encoded content. The hosting proxy still needs appropriate connection limits and timeouts.
+- Moderator reports must be nonblank and at most 12,000 characters, while fitting the encoded body limit. Invalid report text returns `400`.
+- Report content is displayed as literal plain text. Command text and response URLs are filtered from logs and Sentry reports.
+
+See [SECURITY.md](SECURITY.md) for the security checks, privacy protections, deployment requirements, and Slack permission review.
+
+## Tests and checks
+
+Run the same application checks used by CI:
+
+```sh
+bundle exec standardrb
+bundle exec rspec
+RAILS_ENV=test bundle exec rails zeitwerk:check
+bundle exec bundler-audit check --update
+bundle exec brakeman --no-pager
+```
+
+Check production boot with synthetic values and Sentry reporting disabled for that check:
+
+```sh
+RAILS_ENV=production \
+SECRET_KEY_BASE=synthetic-ci-secret-key-base \
+SLACK_SIGNING_SECRET=synthetic-ci-signing-secret \
+SENTRY_CURRENT_ENV=ci \
+bundle exec rails runner 'puts "Rails #{Rails.version} production boot passed"'
+```
+
+These values are for the boot check only, not a live deployment. Automated tests use synthetic content and mocked Slack calls, so they do not post to a live workspace. Passing tests does not verify the live app's credentials, channel membership, or installed scopes.
+
+Use `bundle exec standardrb --fix` only when you want the linter to modify source files. Review its changes before committing.
+
+The [Ruby workflow](.github/workflows/ruby.yml) runs lint, tests, eager loading, production boot, dependency auditing, and Brakeman. [CodeQL](.github/workflows/codeql.yml) provides a separate analysis. Check the results for the latest PR commit before merging.
+
+## Updating dependencies
+
+For a targeted update, run `bundle update <gem-name>`, review the `Gemfile.lock` changes, and rerun the checks above. Use `bundle update` when intentionally updating all permitted dependencies. Keep the Ruby version in the application and workflows consistent.
+
+## API documentation
+
+Generate a fresh local copy with YARD:
+
+```sh
+bundle exec yard doc --no-cache --output-dir tmp/api-docs 'app/**/*.rb'
+```
+
+Open `tmp/api-docs/index.html` to view it. This output is gitignored.
+
+The [Pages workflow](.github/workflows/static.yml) generates documentation from the current source in a clean temporary directory, checks the generated pages, and uploads the artifact. It does not publish the committed `doc/` snapshot. Pull requests build and validate the documentation without deploying it. Pushes to `main`, or a manual workflow run on `main`, also run deployment.
+
+To publish a repository's documentation, set **Settings → Pages → Build and deployment → Source** to **GitHub Actions**. After deployment succeeds, use the URL shown by the `github-pages` environment or the deploy job. A successful documentation build alone does not confirm that the site is published.
