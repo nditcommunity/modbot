@@ -1,8 +1,8 @@
 display_information:
-  name: NDIT Bot
+  name: Mod Bot
 features:
   bot_user:
-    display_name: NDIT Bot
+    display_name: Mod Bot
     always_online: false
 oauth_config:
   scopes:
