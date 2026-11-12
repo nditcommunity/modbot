@@ -1,4 +1,4 @@
-# NDIT Slack Bot
+# Mod Bot
 
 This application lets Slack members send messages to moderators and add themselves to configured private channels. Replies work in channels and direct messages.
 
@@ -16,8 +16,8 @@ This application uses [Ruby 3.3.1](https://www.ruby-lang.org/en/documentation/in
 You can use either [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io). Further instructions assume use of rvm.
 1. Install rvm.
 2. `rvm install ruby-3.3.1`
-3. `cd` into the `slack-bot` directory
-4. This should create a `slack-bot` gemset (a self-contained set of installed gems to avoid conflicts).
+3. `cd` into the `modbot` directory
+4. This should create a `modbot` gemset (a self-contained set of installed gems to avoid conflicts).
 5. `gem install bundler`
 6. `bundle install`
 7. You are good to go!
