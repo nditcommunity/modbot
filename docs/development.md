@@ -1,4 +1,4 @@
-# Development and maintenance
+# Maintenance
 
 [Back to README](../README.md)
 
@@ -34,16 +34,15 @@ The [Ruby workflow](https://github.com/nditcommunity/modbot/blob/main/.github/wo
 
 For a targeted update, run `bundle update <gem-name>`, review the `Gemfile.lock` changes, and rerun the checks above. Use `bundle update` when intentionally updating all permitted dependencies. Keep the Ruby version in the application and workflows consistent.
 
-## API documentation
+## Deployment checks
 
-Generate a fresh local copy with YARD:
+1. Check that lint, tests, eager loading, production boot, the dependency audit, Brakeman, CodeQL, and the documentation build pass for the exact latest PR commit. Recheck after further edits or conflict resolution.
+2. After merging, confirm Heroku deployed the intended `main` commit and the application responds successfully. GitHub Pages publishes documentation only; it does not deploy the Slack bot.
+3. Verify the existing Slack command URLs, credentials, bot membership, and private-channel configuration if any of them changed. Run live command checks only with authorization, using designated test channels or a separate test workspace. `/mods` sends a real report and `/add-to-channel` can change channel membership.
+4. Check help, an allowed channel request, an unknown channel, moderator-report delivery, and direct-message replies as relevant to the change. Check sanitized application errors if a command fails.
 
-```sh
-bundle exec yard doc --no-cache --asset assets --output-dir tmp/api-docs 'app/**/*.rb'
-```
+## Documentation checks
 
-Open `tmp/api-docs/index.html` to view it. This output is gitignored.
+The [documentation workflow](https://github.com/nditcommunity/modbot/blob/main/.github/workflows/static.yml) generates YARD pages from the current source in a clean temporary directory, checks the pages and icon, and uploads an artifact. Pull requests validate documentation without publishing it. Runs on `main` also attempt a GitHub Pages deployment.
 
-The [Pages workflow](https://github.com/nditcommunity/modbot/blob/main/.github/workflows/static.yml) generates documentation from the current source in a clean temporary directory, checks the generated pages, and uploads the artifact. It does not publish the committed `doc/` snapshot. Pull requests build and validate the documentation without deploying it. Pushes to `main`, or a manual workflow run on `main`, also run deployment.
-
-The workflow requires GitHub Pages to be configured with GitHub Actions as its source. Build or deployment success alone does not confirm that its public URL works. These repository guides can be read directly on GitHub without a documentation site.
+Check the build results when changing source comments, README content, or assets. If a public documentation site is being used, verify its actual URL after deployment rather than relying on a green workflow alone. The maintenance guides themselves live in this repository.

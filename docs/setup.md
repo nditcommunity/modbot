@@ -1,82 +1,47 @@
-# Setup and deployment
+# Configuration and hosting
 
 [Back to README](../README.md)
 
-## Requirements
+This guide covers maintaining NDIT's existing Mod Bot and Slack integration.
 
-- [Ruby 3.3.1](https://www.ruby-lang.org/en/documentation/installation/), as specified in `.ruby-version` and `Gemfile`.
-- Bundler and the dependencies in `Gemfile.lock`.
-- Rails 8.1.4.1 or a newer compatible 8.1 patch release, installed by Bundler.
-- A Slack app and workspace for integration testing or deployment.
+## Hosted application
 
-A Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv) or [RVM](https://rvm.io) is recommended. With RVM:
+Mod Bot runs on [Heroku](https://nd-in-tech-bot-e4683f501c14.herokuapp.com/). Its source is [nditcommunity/modbot](https://github.com/nditcommunity/modbot). The current runtime uses Ruby 3.3.1 and Rails 8.1.4.1 or a newer compatible 8.1 patch release.
 
-```sh
-rvm install ruby-3.3.1
-cd modbot
-rvm use ruby-3.3.1@modbot --create
-gem install bundler
-bundle install
-```
+Keep the deployed revision aligned with the intended commit on `main`. A GitHub merge or passing CI does not by itself confirm a successful Heroku release. Follow the [deployment checks](development.md#deployment-checks) after changes.
 
-The repository's `.ruby-gemset` uses `modbot`. Run `bundle install` in that gemset even if dependencies were previously installed in another one. With another version manager, select Ruby 3.3.1 and run the same Bundler commands from the repository root.
+## Hosting configuration
 
-
-## Configuration
-
-Set these environment variables in your local environment or hosting service:
+The hosting service supplies these environment variables:
 
 | Variable | Purpose |
 | --- | --- |
-| `SLACK_OAUTH_TOKEN` | Bot user OAuth token for the installed Slack app. The runtime client explicitly uses this token. |
-| `SLACK_SIGNING_SECRET` | Signing secret from the Slack app's Basic Information page. Required for signed requests; production will not start without it. |
-| `SECRET_KEY_BASE` | Rails secret key base. Generate a value with `bundle exec rails secret`. |
-| `MOD_CHANNEL` | ID of the channel that receives moderator reports. |
+| `SLACK_OAUTH_TOKEN` | Bot user OAuth token for NDIT's installed Slack app. The runtime client explicitly uses this token. |
+| `SLACK_SIGNING_SECRET` | Signing secret for the installed Slack app. Required for signed requests; production will not start without it. |
+| `SECRET_KEY_BASE` | Rails secret key base for the hosted application. |
+| `MOD_CHANNEL` | ID of the NDIT channel that receives moderator reports. |
 
-For local development, `dotenv-rails` can load these from a gitignored `.env` file. Do not commit credentials. A channel ID can be found in Slack's channel details or its browser URL.
+Production uses `RAILS_ENV=production`. Keep credentials in the hosting service's protected configuration, not source files, logs, or documentation.
 
-### Workspace-specific settings
+## Channel configuration
 
-Before using this application in another workspace, review:
+- [`SlackMessage::CHANNELS`](https://github.com/nditcommunity/modbot/blob/main/app/models/slack_message.rb) contains the private-channel IDs and descriptions used for invitations and help text. Keep these aligned with channel renames and the channels offered by `/add-to-channel`.
+- [`Slack::Client::SUPPORT_CHANNEL`](https://github.com/nditcommunity/modbot/blob/main/app/lib/slack/client.rb) links error messages to NDIT's `#ndit-meta`.
+- The bot must belong to the moderator channel and each private channel it invites members to. An admin account's membership does not give the bot membership.
 
-- [`SlackMessage::CHANNELS`](https://github.com/nditcommunity/modbot/blob/main/app/models/slack_message.rb): private-channel IDs and descriptions used for invitations and help text.
-- [`Slack::Client::SUPPORT_CHANNEL`](https://github.com/nditcommunity/modbot/blob/main/app/lib/slack/client.rb): the channel link in error messages, currently NDIT's `#ndit-meta`.
-- [`config/initializers/sentry.rb`](https://github.com/nditcommunity/modbot/blob/main/config/initializers/sentry.rb): the production Sentry destination and sampling configuration. Replace or remove the existing project destination before deploying a fork. Production tracing currently samples all transactions; development and test reports are disabled.
+## Existing Slack integration
 
-## Running locally
+NDIT's slash commands use these endpoints on the hosted application:
 
-Install dependencies, configure the environment, then start the application:
+| Command | Request URL | Purpose |
+| --- | --- | --- |
+| `/mods` | `https://nd-in-tech-bot-e4683f501c14.herokuapp.com/mod` | Send a message to the moderators |
+| `/add-to-channel` | `https://nd-in-tech-bot-e4683f501c14.herokuapp.com/channels` | Show private-channel help or join a configured channel |
 
-```sh
-bundle exec rails server
-```
+If the hosting address changes, verify both command URLs in the existing app's Slack settings. Do not treat the repository's [manifest](https://github.com/nditcommunity/modbot/blob/main/.slack_manifest.yml) as a complete record of the installed app: it does not define these slash commands, and its listed scopes are not a validated minimum. Review [Slack permissions](https://github.com/nditcommunity/modbot/blob/main/SECURITY.md#slack-permission-review) before changing grants or reinstalling the app.
 
-The server runs at `http://localhost:3000`. Slack must reach a public HTTPS URL for live slash-command testing. Use a separate test workspace and test channels: requests that send messages or invite members change the configured workspace.
+## Error reporting and security
 
-## Installing and deploying the Slack app
+[`config/initializers/sentry.rb`](https://github.com/nditcommunity/modbot/blob/main/config/initializers/sentry.rb) configures NDIT's production Sentry destination and sampling. Production tracing samples all transactions; development and test reporting are disabled. Sensitive request data is filtered before reporting.
 
-1. [Create a Slack app](https://api.slack.com/apps). Use [`.slack_manifest.yml`](https://github.com/nditcommunity/modbot/blob/main/.slack_manifest.yml) as a starting point, updating its name for your workspace.
-2. Review OAuth scopes. The manifest currently includes `users:read`, `im:write`, `chat:write`, `channels:join`, `channels:manage`, `groups:write`, `groups:read`, `im:read`, and `channels:read`. It does not include `commands` or define the slash commands. Add the slash-command capability and configure both commands below in the app settings. These existing scopes are not a validated minimum; see the [permission review](https://github.com/nditcommunity/modbot/blob/main/SECURITY.md#slack-permission-review) before changing installed grants.
-3. Install the app to the intended workspace and use its bot user OAuth token for `SLACK_OAUTH_TOKEN`. Reinstall it if approved scope changes require new grants.
-4. Add the bot to the moderator channel and each private channel it is configured to invite members to. An account's membership does not give the bot membership.
-5. Deploy the Rails application to Heroku or another Ruby-compatible host. Set the four environment variables above, use `RAILS_ENV=production`, and expose the application over HTTPS.
-6. Configure these slash commands, replacing the example host with your application's public URL:
-
-| Command | Request URL | Description | Usage hint |
-| --- | --- | --- | --- |
-| `/mods` | `https://your-app.example/mod` | Send a message to the moderators | `<message to mods>` |
-| `/add-to-channel` | `https://your-app.example/channels` | Join a private channel | `help or <channel name>` |
-
-7. Run the [development checks](development.md#tests-and-checks) and test `/mods`, private-channel help, an allowed join, an unknown channel, and replies from a direct message in the test workspace. Confirm that the report reaches the intended moderator channel and that invitations target the configured private channels.
-
-The GitHub Pages workflow publishes API documentation only. It does not deploy the running Slack bot.
-
-## Security behavior
-
-- Slack webhook signatures are verified against the exact request body. Missing, invalid, or expired signatures return `403`.
-- POST bodies larger than 64 KiB return `413`, including URL-encoded content. The hosting proxy still needs appropriate connection limits and timeouts.
-- Moderator reports must be nonblank and at most 12,000 characters, while fitting the encoded body limit. Invalid report text returns `400`.
-- Report content is displayed as literal plain text. Command text and response URLs are filtered from logs and Sentry reports.
-
-See [SECURITY.md](https://github.com/nditcommunity/modbot/blob/main/SECURITY.md) for the security checks, privacy protections, deployment requirements, and Slack permission review.
-
+See [Security](https://github.com/nditcommunity/modbot/blob/main/SECURITY.md) for webhook validation, request limits, privacy protections, and permission review. See [Maintenance](development.md) for the checks required before and after deployment.
