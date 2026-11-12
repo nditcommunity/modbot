@@ -1,42 +1,60 @@
-# Simple workflow for deploying static content to GitHub Pages
+# Build API documentation and publish it to GitHub Pages.
 name: Deploy static content to Pages
 
 on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# Documentation builds do not need deployment permissions.
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-# Allow one concurrent deployment
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
 
 jobs:
-  # Single deploy job since we're just deploying
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3.1'
+          bundler-cache: true
+      - name: Build API documentation
+        run: bundle exec yard doc --no-cache --output-dir "${{ runner.temp }}/pages-docs" 'app/**/*.rb'
+      - name: Check generated documentation
+        run: |
+          test -s "${{ runner.temp }}/pages-docs/index.html"
+          test -s "${{ runner.temp }}/pages-docs/_index.html"
+          test -s "${{ runner.temp }}/pages-docs/SlackMessage.html"
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: ${{ runner.temp }}/pages-docs
+
   deploy:
+    # Pull requests validate and upload the docs, but only main can publish.
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Setup Pages
-        uses: actions/configure-pages@v2
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          # Upload entire repository
-          path: './doc'
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
