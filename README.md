@@ -1,74 +1,48 @@
+<img src="assets/ndit-bot.png" align="right" width="180" alt="Mod Bot mascot">
+
 # Mod Bot
 
-This application lets Slack members send messages to moderators and add themselves to configured private channels. Replies work in channels and direct messages.
+Mod Bot helps members of the Neurodiversity in Tech Slack workspace contact moderators and join configured private channels. It is a Ruby on Rails application with replies in channels and direct messages.
 
-## System Requirements
+## Commands
 
-**NOTE: if you want to use a version manager, please skip to the next section. Using a version manager is highly recommended.**
+- `/mods <message>` sends a report to the moderator channel and confirms delivery to the member.
+- `/add-to-channel help` lists the private channels available through the bot.
+- `/add-to-channel <name>` invites the member to a configured private channel.
 
-This application uses [Ruby 3.3.1](https://www.ruby-lang.org/en/documentation/installation/). You'll need the following
-- [RubyGems](https://rubygems.org/pages/download) (installed with rvm)
-- bundler (`gem install bundler`)
-- required libraries (run `bundle install` from the application home directory)
+The current channel arguments are `bipoc`, `women-nonbinary`, and `queer`. Help explains who each channel is for. Arguments also accept underscores, the `intersection-` prefix, and an optional leading `#`.
 
-### If you want to use a version manager
+## Getting started
 
-You can use either [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io). Further instructions assume use of rvm.
-1. Install rvm.
-2. `rvm install ruby-3.3.1`
-3. `cd` into the `modbot` directory
-4. This should create a `modbot` gemset (a self-contained set of installed gems to avoid conflicts).
-5. `gem install bundler`
-6. `bundle install`
-7. You are good to go!
+Use Ruby **3.3.1** and Bundler. The application uses Rails **8.1.4.1** or a newer compatible 8.1 patch release.
 
-## Running Locally
+```sh
+git clone https://github.com/nditcommunity/modbot.git
+cd modbot
+bundle install
+```
 
-You need four environment variables set:
+Set `SLACK_OAUTH_TOKEN`, `SLACK_SIGNING_SECRET`, `SECRET_KEY_BASE`, and `MOD_CHANNEL`, then run:
 
-1. `SLACK_OAUTH_TOKEN`
-2. `SLACK_SIGNING_SECRET`
-3. `SECRET_KEY_BASE`
-4. `MOD_CHANNEL`
+```sh
+bundle exec rails server
+```
 
-Get the moderator channel ID by opening the channel in Slack in a browser and looking at the URL. Get the bot token and signing secret from your Slack app settings. Once these are set, start the web application:
+The local server runs at `http://localhost:3000`. Follow the [setup guide](https://github.com/nditcommunity/modbot/blob/main/docs/setup.md) to configure the Slack app, channel IDs, bot membership, and slash commands. Use a separate test workspace for live testing because messages and invitations affect the configured workspace.
 
-`bundle exec rails server`
+## Documentation
 
-The app handles Slack slash-command requests. Requests that send messages or invite members affect the configured workspace, so use a test workspace for manual testing.
+- [Setup and deployment](https://github.com/nditcommunity/modbot/blob/main/docs/setup.md): runtime requirements, environment variables, workspace configuration, Slack installation, and hosting.
+- [Development and maintenance](https://github.com/nditcommunity/modbot/blob/main/docs/development.md): test commands, security checks, dependency updates, and generated API documentation.
+- [Security](https://github.com/nditcommunity/modbot/blob/main/SECURITY.md): webhook validation, privacy protections, and the Slack permission review.
 
-## Running tests
+The documentation lives in this repository. GitHub Pages is not required to run the bot or read these guides.
 
-`bundle exec rspec`
-That's it!
+## Checks
 
-## Running the linter
+```sh
+bundle exec standardrb
+bundle exec rspec
+```
 
-`bundle exec standardrb --fix`
-
-## Deploying to Slack
-
-1. Follow instructions and [create a new slack app](https://api.slack.com/authentication/basics)
-2. Add the following Bot Token scopes to your slack app: `users:read`, `im:write`, `chat:write`, `channels:join`, `channels:manage`, `groups:write`, `groups:read`, `im:read`, and `channels:read`. *OR* copy `.slack_manifest.yml` and update the app name.
-3. Create a new app in Heroku or your hosting service of choice. Set `SECRET_KEY_BASE`, `SLACK_OAUTH_TOKEN`, `SLACK_SIGNING_SECRET`, and `MOD_CHANNEL` as environment variables.
-4. Deploy the app.
-5. Go to your app in Slack, then to slash commands, and create the moderator command:
-
-- Command: `/mods`
-- Request URL: `https://your-app.herokuapp.com/mod`
-- Short Description: `Notifies the mods channel`
-- Usage Hint: `<message to mods>`
-
-For private-channel access, point a slash command at `https://your-app.herokuapp.com/channels`. Members can pass `help` to see available channels or a channel name to join. Configure channel IDs and descriptions in `SlackMessage::CHANNELS`.
-
-The available channel arguments are `bipoc`, `women-nonbinary`, and `queer`. The `women-nonbinary` option uses the shared women/nonbinary channel ID. Updating this list does not rename or archive Slack channels. Channel arguments also accept underscores, the `intersection-` prefix, and an optional leading `#`.
-
-## Updating the gems
-
-Dependabot is turned on, but if you want to do it manually, run:
-
-`bundle update`
-
-## Updating the documentation
-
-Regenerate the API documentation with `bundle exec yard doc 'app/**/*.rb'`. The generated `doc` directory is published by the Pages workflow.
+Before merging or deploying, also run the dependency audit, Brakeman, eager-loading check, and production boot check in the [development guide](https://github.com/nditcommunity/modbot/blob/main/docs/development.md). Automated tests mock Slack calls and do not post to a live workspace.
