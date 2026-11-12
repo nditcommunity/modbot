@@ -17,3 +17,7 @@ The current channel arguments are `bipoc`, `women-nonbinary`, and `queer`. Help 
 - [Configuration and hosting](https://github.com/nditcommunity/modbot/blob/main/docs/setup.md): NDIT's hosted bot, environment variables, channel configuration, and Slack integration.
 - [Maintenance](https://github.com/nditcommunity/modbot/blob/main/docs/development.md): tests, CI, dependency updates, and deployment checks.
 - [Security](https://github.com/nditcommunity/modbot/blob/main/SECURITY.md): webhook validation, privacy protections, and the Slack permission review.
+
+## Credits
+
+Mod Bot is a fork of [slack-pairs](https://github.com/jmkoni/slack-pairs), created by [@jmkoni](https://github.com/jmkoni). The project retains the [GNU General Public License v3.0](https://github.com/nditcommunity/modbot/blob/main/LICENSE.md).
