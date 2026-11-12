@@ -6,13 +6,13 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.9.36
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" />
+  <link rel="stylesheet" href="css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" />
+  <link rel="stylesheet" href="css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "README";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -57,88 +59,69 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><div id='filecontents'>
-<h1 id="label-NDIT+Slack+Bot">NDIT Slack Bot</h1>
-
+      <div id="content"><div id='filecontents'><h1 id="NDIT_Slack_Bot">NDIT Slack Bot</h1>
 <p>This application lets Slack members send messages to moderators and add themselves to configured private channels. Replies work in channels and direct messages.</p>
-
-<h2 id="label-System+Requirements">System Requirements</h2>
-
+<h2 id="System_Requirements">System Requirements</h2>
 <p><strong>NOTE: if you want to use a version manager, please skip to the next section. Using a version manager is highly recommended.</strong></p>
-
-<p>This application uses <a href="https://www.ruby-lang.org/en/documentation/installation/">Ruby 3.3.1</a>. You’ll need the following - <a href="https://rubygems.org/pages/download">RubyGems</a> (installed with rvm) - bundler (<code>gem install bundler</code>) - required libraries (run <code>bundle install</code> from the application home directory)</p>
-
-<h3 id="label-If+you+want+to+use+a+version+manager">If you want to use a version manager</h3>
-
-<p>You can use either <a href="https://github.com/rbenv/rbenv">rbenv</a> or <a href="https://rvm.io">rvm</a>. Further instructions assume use of rvm. 1. Install rvm. 2. <code>rvm install ruby-3.3.1</code> 3. <code>cd</code> into the <code>slack-bot</code> directory 4. This should create a <code>slack-bot</code> gemset (a self-contained set of installed gems to avoid conflicts). 5. <code>gem install bundler</code> 6. <code>bundle install</code> 7. You are good to go!</p>
-
-<h2 id="label-Running+Locally">Running Locally</h2>
-
+<p>This application uses <a href="https://www.ruby-lang.org/en/documentation/installation/">Ruby 3.3.1</a>. You'll need the following</p>
+<ul>
+<li><a href="https://rubygems.org/pages/download">RubyGems</a> (installed with rvm)</li>
+<li>bundler (<code>gem install bundler</code>)</li>
+<li>required libraries (run <code>bundle install</code> from the application home directory)</li>
+</ul>
+<h3 id="If_you_want_to_use_a_version_manager">If you want to use a version manager</h3>
+<p>You can use either <a href="https://github.com/rbenv/rbenv">rbenv</a> or <a href="https://rvm.io">rvm</a>. Further instructions assume use of rvm.</p>
+<ol>
+<li>Install rvm.</li>
+<li><code>rvm install ruby-3.3.1</code></li>
+<li><code>cd</code> into the <code>slack-bot</code> directory</li>
+<li>This should create a <code>slack-bot</code> gemset (a self-contained set of installed gems to avoid conflicts).</li>
+<li><code>gem install bundler</code></li>
+<li><code>bundle install</code></li>
+<li>You are good to go!</li>
+</ol>
+<h2 id="Running_Locally">Running Locally</h2>
 <p>You need four environment variables set:</p>
-<ol><li>
-<p><code>SLACK_OAUTH_TOKEN</code></p>
-</li><li>
-<p><code>SLACK_SIGNING_SECRET</code></p>
-</li><li>
-<p><code>SECRET_KEY_BASE</code></p>
-</li><li>
-<p><code>MOD_CHANNEL</code></p>
-</li></ol>
-
+<ol>
+<li><code>SLACK_OAUTH_TOKEN</code></li>
+<li><code>SLACK_SIGNING_SECRET</code></li>
+<li><code>SECRET_KEY_BASE</code></li>
+<li><code>MOD_CHANNEL</code></li>
+</ol>
 <p>Get the moderator channel ID by opening the channel in Slack in a browser and looking at the URL. Get the bot token and signing secret from your Slack app settings. Once these are set, start the web application:</p>
-
 <p><code>bundle exec rails server</code></p>
-
 <p>The app handles Slack slash-command requests. Requests that send messages or invite members affect the configured workspace, so use a test workspace for manual testing.</p>
-
-<h2 id="label-Running+tests">Running tests</h2>
-
-<p><code>bundle exec rspec</code> That’s it!</p>
-
-<h2 id="label-Running+the+linter">Running the linter</h2>
-
+<h2 id="Running_tests">Running tests</h2>
+<p><code>bundle exec rspec</code>
+That's it!</p>
+<h2 id="Running_the_linter">Running the linter</h2>
 <p><code>bundle exec standardrb --fix</code></p>
-
-<h2 id="label-Deploying+to+Slack">Deploying to Slack</h2>
-<ol><li>
-<p>Follow instructions and <a href="https://api.slack.com/authentication/basics">create a new slack app</a></p>
-</li><li>
-<p>Add the following Bot Token scopes to your slack app: <code>users:read</code>, <code>im:write</code>, <code>chat:write</code>, <code>channels:join</code>, <code>channels:manage</code>, <code>groups:write</code>, <code>groups:read</code>, <code>im:read</code>, and <code>channels:read</code>. <em>OR</em> copy <code>.slack_manifest.yml</code> and update the app name.</p>
-</li><li>
-<p>Create a new app in Heroku or your hosting service of choice. Set <code>SECRET_KEY_BASE</code>, <code>SLACK_OAUTH_TOKEN</code>, <code>SLACK_SIGNING_SECRET</code>, and <code>MOD_CHANNEL</code> as environment variables.</p>
-</li><li>
-<p>Deploy the app.</p>
-</li><li>
-<p>Go to your app in Slack, then to slash commands, and create the moderator command:</p>
-</li><li>
-<p>Command: <code>/mods</code></p>
-</li><li>
-<p>Request URL: <code>https://your-app.herokuapp.com/mod</code></p>
-</li><li>
-<p>Short Description: <code>Notifies the mods channel</code></p>
-</li><li>
-<p>Usage Hint: <code>&lt;message to mods&gt;</code></p>
-</li></ol>
-
+<h2 id="Deploying_to_Slack">Deploying to Slack</h2>
+<ol>
+<li>Follow instructions and <a href="https://api.slack.com/authentication/basics">create a new slack app</a></li>
+<li>Add the following Bot Token scopes to your slack app: <code>users:read</code>, <code>im:write</code>, <code>chat:write</code>, <code>channels:join</code>, <code>channels:manage</code>, <code>groups:write</code>, <code>groups:read</code>, <code>im:read</code>, and <code>channels:read</code>. <em>OR</em> copy <code>.slack_manifest.yml</code> and update the app name.</li>
+<li>Create a new app in Heroku or your hosting service of choice. Set <code>SECRET_KEY_BASE</code>, <code>SLACK_OAUTH_TOKEN</code>, <code>SLACK_SIGNING_SECRET</code>, and <code>MOD_CHANNEL</code> as environment variables.</li>
+<li>Deploy the app.</li>
+<li>Go to your app in Slack, then to slash commands, and create the moderator command:</li>
+</ol>
+<ul>
+<li>Command: <code>/mods</code></li>
+<li>Request URL: <code>https://your-app.herokuapp.com/mod</code></li>
+<li>Short Description: <code>Notifies the mods channel</code></li>
+<li>Usage Hint: <code>&lt;message to mods&gt;</code></li>
+</ul>
 <p>For private-channel access, point a slash command at <code>https://your-app.herokuapp.com/channels</code>. Members can pass <code>help</code> to see available channels or a channel name to join. Configure channel IDs and descriptions in <code>SlackMessage::CHANNELS</code>.</p>
-
 <p>The available channel arguments are <code>bipoc</code>, <code>women-nonbinary</code>, and <code>queer</code>. The <code>women-nonbinary</code> option uses the shared women/nonbinary channel ID. Updating this list does not rename or archive Slack channels. Channel arguments also accept underscores, the <code>intersection-</code> prefix, and an optional leading <code>#</code>.</p>
-
-<h2 id="label-Updating+the+gems">Updating the gems</h2>
-
+<h2 id="Updating_the_gems">Updating the gems</h2>
 <p>Dependabot is turned on, but if you want to do it manually, run:</p>
-
 <p><code>bundle update</code></p>
-
-<h2 id="label-Updating+the+documentation">Updating the documentation</h2>
-
-<p>Regenerate the API documentation with <code>bundle exec yard doc &#39;app/<strong>*/</strong>.rb&#39;</code>. The generated <code>doc</code> directory is published by the Pages workflow.</p>
-</div></div>
+<h2 id="Updating_the_documentation">Updating the documentation</h2>
+<p>Regenerate the API documentation with <code>bundle exec yard doc 'app/**/*.rb'</code>. The generated <code>doc</code> directory is published by the Pages workflow.</p></div></div>
 
       <div id="footer">
-  Generated on Wed Nov 11 18:41:00 2026 by
+  Generated on Wed Nov 11 18:57:27 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.36 (ruby-3.3.1).
+  0.9.45 (ruby-3.3.1).
 </div>
 
     </div>

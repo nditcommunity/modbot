@@ -33,17 +33,22 @@ module SlackMessage
   # @param text [String] text of message
   # @return [JSON] message content fitting Slack's block kit requirements
   def mod_message(user_id:, channel_id:, channel_name:, text:)
+    raise ArgumentError, "Report must contain 1–12,000 characters" unless text.is_a?(String) && text.present? && text.length <= 12_000
+
+    header = "Message from <@#{ERB::Util.html_escape(user_id)}> in <##{ERB::Util.html_escape(channel_id)}>"
     [
       {
         type: "section",
         block_id: "mod_message",
-        text: {
-          type: "mrkdwn",
-          text: "Message from <@#{user_id}>
-in <##{channel_id}> (#{channel_name}):
-#{text}"
+        text: {type: "mrkdwn", text: header}
+      },
+      *text.chars.each_slice(3_000).map.with_index do |characters, index|
+        {
+          type: "section",
+          block_id: "mod_report_#{index}",
+          text: {type: "plain_text", text: characters.join, emoji: false}
         }
-      }
+      end
     ]
   end
 end
