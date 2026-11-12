@@ -51,7 +51,7 @@ RSpec.describe Slack::Client do
       error = StandardError.new("test")
       message = SlackMessage.mod_message(user_id: "123", channel_id: "345", channel_name: "test", text: "something is awry")
       allow(client).to receive(:chat_postMessage).with(channel: "678", blocks: message).and_raise(error)
-      expect(client).to receive(:chat_postEphemeral).with(channel: "345", text: "There was an error! Please copy and send this message to Jennifer:\ntest", user: "123")
+      expect(client).to receive(:chat_postEphemeral).with(channel: "345", text: "There was an error! Please ask the mods for help in <#C068YBHSJRW>.\ntest", user: "123")
       expect { Slack::Client.send_mod_message(user_id: "123", channel_id: "345", channel_name: "test", text: "something is awry", client: client) }.to raise_error(error)
     end
   end
@@ -171,7 +171,7 @@ RSpec.describe Slack::Client do
 
     it "cannot find the channel" do
       expect(client).to receive(:conversations_invite).with({channel: "C06V26ZBMQA", users: "1235"}).and_raise(Slack::Web::Api::Errors::ChannelNotFound.new("bipoc"))
-      expect(client).to receive(:chat_postEphemeral).with({channel: "6890", user: "1235", text: "I could not find that channel. Please check the name against \"help\" or contact Jennifer with channel name: bipoc."})
+      expect(client).to receive(:chat_postEphemeral).with({channel: "6890", user: "1235", text: "I could not find that channel. Please check the name against \"help\" or ask the mods for help in <#C068YBHSJRW>. Channel: bipoc."})
       Slack::Client.add_user_to_channel(
         user_id: "1235",
         channel_id: "6890",
@@ -195,7 +195,7 @@ RSpec.describe Slack::Client do
 
     it "lets the user know if there is a random error" do
       expect(client).to receive(:conversations_invite).with({channel: "C06V26ZBMQA", users: "1235"}).and_raise(Slack::Web::Api::Errors::ChannelCannotBeUnshared.new("oh no"))
-      expect(client).to receive(:chat_postEphemeral).with({channel: "6890", user: "1235", text: "There was an error! Please check bipoc against list in help.\nIf it looks like a bug, please copy and send this message to Jennifer Konikowski:\noh no"})
+      expect(client).to receive(:chat_postEphemeral).with({channel: "6890", user: "1235", text: "There was an error! Please check bipoc against list in help.\nIf it looks like a bug, please ask the mods for help in <#C068YBHSJRW>.\noh no"})
       expect {
         Slack::Client.add_user_to_channel(
           user_id: "1235",

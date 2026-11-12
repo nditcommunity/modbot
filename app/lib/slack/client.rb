@@ -3,6 +3,8 @@ module Slack
   class Client
     attr_reader :client
 
+    SUPPORT_CHANNEL = "<#C068YBHSJRW>"
+
     # Gives user ability to add themselves to a private channel
     #
     # @param channel_name [String] text name of channel (ex: "_general")
@@ -41,7 +43,7 @@ module Slack
           user_id: user_id,
           channel_name: current_channel_name,
           client: client,
-          message: "I could not find that channel. Please check the name against \"help\" or contact Jennifer with channel name: #{channel_name}."
+          message: "I could not find that channel. Please check the name against \"help\" or ask the mods for help in #{SUPPORT_CHANNEL}. Channel: #{channel_name}."
         )
       rescue Slack::Web::Api::Errors::AlreadyInChannel
         post_ephemeral(
@@ -58,7 +60,7 @@ module Slack
           channel_name: current_channel_name,
           client: client,
           message: "There was an error! Please check #{channel_name} against list in help.
-If it looks like a bug, please copy and send this message to Jennifer Konikowski:
+If it looks like a bug, please ask the mods for help in #{SUPPORT_CHANNEL}.
 #{e.message}"
         )
         raise
@@ -135,7 +137,7 @@ If it looks like a bug, please copy and send this message to Jennifer Konikowski
           user_id: user_id,
           channel_name: channel_name,
           client: client,
-          message: "There was an error! Please copy and send this message to Jennifer:
+          message: "There was an error! Please ask the mods for help in #{SUPPORT_CHANNEL}.
 #{e.message}"
         )
         raise
