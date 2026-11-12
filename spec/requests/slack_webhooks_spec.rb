@@ -80,4 +80,9 @@ RSpec.describe "Slack webhooks", type: :request do
     end
     expect(Slack::Client).not_to have_received(:send_mod_message)
   end
+
+  it "surfaces unexpected failures to the test suite rather than rendering a 500 page" do
+    allow(Slack::Client).to receive(:send_mod_message).and_raise(Slack::Client::RequestFailed, "synthetic-reference")
+    expect { submit("/mod") }.to raise_error(Slack::Client::RequestFailed, "synthetic-reference")
+  end
 end

@@ -38,6 +38,17 @@ jobs:
       run: bundle exec standardrb
     - name: Run tests
       run: bundle exec rspec
+    - name: Check eager loading
+      run: bundle exec rails zeitwerk:check
+      env:
+        RAILS_ENV: test
+    - name: Check production boot
+      run: bundle exec rails runner 'puts "Rails #{Rails.version} production boot passed"'
+      env:
+        RAILS_ENV: production
+        SECRET_KEY_BASE: synthetic-ci-secret-key-base
+        SLACK_SIGNING_SECRET: synthetic-ci-signing-secret
+        SENTRY_CURRENT_ENV: ci
     # set up later!
     # - uses: joshmfrankel/simplecov-check-action@main
     #   with:

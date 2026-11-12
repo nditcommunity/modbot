@@ -18,9 +18,11 @@ RAILS_ENV=test bundle exec rails zeitwerk:check
 - Unexpected Slack failures use an opaque reference. Logs retain the error class and reference, not the original exception message or cause. Moderator report content is rendered as literal plain text, split into Slack-sized blocks without truncation. Reports must contain 1–12,000 characters and still fit the encoded request-body limit.
 - Tests use synthetic text and mocked Slack calls. They do not post to a live workspace.
 
-## Dependency follow-up
+## Framework and dependency maintenance
 
-The dependency/security jobs deliberately report findings rather than suppressing them. This patch stays on Rails 7.1 and updates it to the latest 7.1 patch. Rails 7.1 is end-of-life, and current advisories still require a supported Rails release. A framework upgrade and its regression testing are separate follow-up work. A passing application test suite is not a clean security audit.
+Rails is upgraded to 8.1.4.1, the supported release that includes the November 2026 security fixes. The Gemfile requires at least 8.1.4.1 within the 8.1 patch series, and RSpec Rails is upgraded to 8.1.0. Ruby remains 3.3.1. Existing framework configuration defaults are retained to avoid unrelated behavior changes during the security upgrade; this does not retain the old Rails implementation.
+
+On November 11, 2026, the updated ruby-advisory-db (commit `4d71b123428e33f694e805ce15351ee3d8d62ef7`) reported no vulnerable dependencies, and Brakeman 8.1.0 reported no security warnings. No advisories are ignored or suppressed. CI refreshes the advisory database for each run, so rerun both checks before deployment rather than treating this result as permanent. Application tests, eager loading, and a production-mode boot are also required.
 
 ## Slack permission review
 
