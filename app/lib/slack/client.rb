@@ -3,6 +3,8 @@ module Slack
   class Client
     attr_reader :client
 
+    SUPPORT_CHANNEL = "<#C068YBHSJRW>"
+
     # Gives user ability to add themselves to a private channel
     #
     # @param channel_name [String] text name of channel (ex: "_general")
@@ -11,7 +13,7 @@ module Slack
     # @param client [Slack::Web::Client] the slack web client, defaults to nil
     def self.add_user_to_channel(user_id:, channel_id:, current_channel_name:, channel_name:, client: nil)
       client ||= default_client # if nil, set = to default
-      channel_name = channel_name.downcase.sub("-", "_").to_sym
+      channel_name = channel_name.strip.delete_prefix("#").downcase.tr("-", "_").delete_prefix("intersection_").to_sym
       begin
         if channel_name == :help
           post_ephemeral(
@@ -41,7 +43,7 @@ module Slack
           user_id: user_id,
           channel_name: current_channel_name,
           client: client,
-          message: "I could not find that channel. Please check the name against \"help\" or contact Jennifer with channel name: #{channel_name}."
+          message: "I could not find that channel. Please check the name against \"help\" or ask the mods for help in #{SUPPORT_CHANNEL}. Channel: #{channel_name}."
         )
       rescue Slack::Web::Api::Errors::AlreadyInChannel
         post_ephemeral(
@@ -58,7 +60,7 @@ module Slack
           channel_name: current_channel_name,
           client: client,
           message: "There was an error! Please check #{channel_name} against list in help.
-If it looks like a bug, please copy and send this message to Jennifer Konikowski:
+If it looks like a bug, please ask the mods for help in #{SUPPORT_CHANNEL}.
 #{e.message}"
         )
         raise
@@ -135,7 +137,7 @@ If it looks like a bug, please copy and send this message to Jennifer Konikowski
           user_id: user_id,
           channel_name: channel_name,
           client: client,
-          message: "There was an error! Please copy and send this message to Jennifer:
+          message: "There was an error! Please ask the mods for help in #{SUPPORT_CHANNEL}.
 #{e.message}"
         )
         raise
