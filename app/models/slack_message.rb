@@ -4,14 +4,9 @@ module SlackMessage
 
   # constant for channel ids and descriptions for identity channels
   CHANNELS = {
-    thirty_five_plus: {channel_id: "C070AHYHKHN", description: "for anyone 35 and older"},
     bipoc: {channel_id: "C06V26ZBMQA", description: "for anyone who identifies as BIPOC"},
-    marginalized_genders: {channel_id: "C067HKZ219C", description: "not a cis dude? this channel's for you!"},
-    nonbinary: {channel_id: "C06866GL9BN", description: "for nonbinary folks"},
-    queer: {channel_id: "C067M825K6Z", description: "for LGBTQIA+ folks"},
-    trans: {channel_id: "C068SG4F140", description: "for anyone who identifies as trans"},
-    women: {channel_id: "C068GBV8V09", description: "for anyone who identifies as a woman"},
-    physical_disability: {channel_id: "C074GQJMHN2", description: "for anyone with a physical disability"}
+    women_nonbinary: {channel_id: "C067HKZ219C", description: "for women and nonbinary people"},
+    queer: {channel_id: "C067M825K6Z", description: "for LGBTQIA+ folks"}
   }
 
   # Generates help message for identity channels
@@ -24,15 +19,7 @@ module SlackMessage
         block_id: "help_message",
         text: {
           type: "mrkdwn",
-          text: "*thirty_five_plus*: #{CHANNELS[:thirty_five_plus][:description]}
-*bipoc:* #{CHANNELS[:bipoc][:description]}
-*marginalized_genders:* #{CHANNELS[:marginalized_genders][:description]}
-*nonbinary:* #{CHANNELS[:nonbinary][:description]}
-*queer:* #{CHANNELS[:queer][:description]}
-*trans:* #{CHANNELS[:trans][:description]}
-*women:* #{CHANNELS[:women][:description]}
-*physical_disability:* #{CHANNELS[:physical_disability][:description]}
-"
+          text: CHANNELS.map { |name, channel| "*#{name.to_s.tr("_", "-")}:* #{channel[:description]}" }.join("\n")
         }
       }
     ]

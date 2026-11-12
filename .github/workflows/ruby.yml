@@ -16,7 +16,7 @@ on:
       - main
 jobs:
   linter_and_tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         ruby-version: ['3.3.1']

@@ -122,6 +122,8 @@
 
 <p>For private-channel access, point a slash command at <code>https://your-app.herokuapp.com/channels</code>. Members can pass <code>help</code> to see available channels or a channel name to join. Configure channel IDs and descriptions in <code>SlackMessage::CHANNELS</code>.</p>
 
+<p>The available channel arguments are <code>bipoc</code>, <code>women-nonbinary</code>, and <code>queer</code>. The <code>women-nonbinary</code> option uses the shared women/nonbinary channel ID. Updating this list does not rename or archive Slack channels. Channel arguments also accept underscores, the <code>intersection-</code> prefix, and an optional leading <code>#</code>.</p>
+
 <h2 id="label-Updating+the+gems">Updating the gems</h2>
 
 <p>Dependabot is turned on, but if you want to do it manually, run:</p>
