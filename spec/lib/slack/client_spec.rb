@@ -126,6 +126,49 @@ RSpec.describe Slack::Client do
       )
     end
 
+    ["women-nonbinary", "women_nonbinary", "intersection-women-nonbinary", " #Intersection-Women-Nonbinary "].each do |channel_name|
+      it "joins the retained channel using #{channel_name.inspect}" do
+        expect(client).to receive(:conversations_invite).with(channel: "C067HKZ219C", users: "1235")
+
+        Slack::Client.add_user_to_channel(
+          user_id: "1235",
+          channel_id: "6890",
+          current_channel_name: "general",
+          channel_name: channel_name,
+          client: client
+        )
+      end
+    end
+
+    ["thirty_five_plus", "thirty-five-plus", "women", "nonbinary", "trans", "physical_disability", "physical-disability", "marginalized_genders"].each do |channel_name|
+      it "does not invite users to the removed #{channel_name} option" do
+        expect(client).not_to receive(:conversations_invite)
+        expect(client).to receive(:chat_postEphemeral).with(
+          channel: "6890", user: "1235", text: "I could not find that channel. Please check the name against \"help\"."
+        )
+
+        Slack::Client.add_user_to_channel(
+          user_id: "1235",
+          channel_id: "6890",
+          current_channel_name: "general",
+          channel_name: channel_name,
+          client: client
+        )
+      end
+    end
+
+    it "still invites members to the queer channel" do
+      expect(client).to receive(:conversations_invite).with(channel: "C067M825K6Z", users: "1235")
+
+      Slack::Client.add_user_to_channel(
+        user_id: "1235",
+        channel_id: "6890",
+        current_channel_name: "general",
+        channel_name: "queer",
+        client: client
+      )
+    end
+
     it "cannot find the channel" do
       expect(client).to receive(:conversations_invite).with({channel: "C06V26ZBMQA", users: "1235"}).and_raise(Slack::Web::Api::Errors::ChannelNotFound.new("bipoc"))
       expect(client).to receive(:chat_postEphemeral).with({channel: "6890", user: "1235", text: "I could not find that channel. Please check the name against \"help\" or contact Jennifer with channel name: bipoc."})

@@ -11,7 +11,7 @@ module Slack
     # @param client [Slack::Web::Client] the slack web client, defaults to nil
     def self.add_user_to_channel(user_id:, channel_id:, current_channel_name:, channel_name:, client: nil)
       client ||= default_client # if nil, set = to default
-      channel_name = channel_name.downcase.sub("-", "_").to_sym
+      channel_name = channel_name.strip.delete_prefix("#").downcase.tr("-", "_").delete_prefix("intersection_").to_sym
       begin
         if channel_name == :help
           post_ephemeral(
