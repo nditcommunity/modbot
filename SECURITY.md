@@ -14,7 +14,7 @@ RAILS_ENV=test bundle exec rails zeitwerk:check
 
 - Every POST body is limited to 64 KiB before Rails, logging, Sentry, or Slack signature verification reads or parses it. Both the declared size and actual stream are checked, including absent or misleading Content-Length. Larger requests return 413 without calling Slack. This is a body-memory bound, not a network timeout or rate limit; the hosting proxy/server still needs suitable connection and request limits.
 - The exact accepted bytes are preserved for Slack signature verification. Missing, forged, altered, expired, or malformed signatures return 403. A blank production signing secret prevents startup; empty signing configuration in other environments fails closed.
-- Command text and response URLs are filtered from Rails parameters. Sentry request bodies, query strings, headers, cookies, user/extra fields, and breadcrumbs are removed. Sentry is enabled only in production so tests and development cannot send reports to the production project.
+- Command text and response URLs are filtered from Rails parameters. Sentry request bodies, query strings, headers, cookies, user/extra fields, breadcrumbs, and free-form trace-span data/descriptions are removed. Sentry is enabled only in production so tests and development cannot send reports to the production project.
 - Unexpected Slack failures use an opaque reference. Logs retain the error class and reference, not the original exception message or cause. Moderator report content is rendered as literal plain text, split into Slack-sized blocks without truncation. Reports must contain 1–12,000 characters and still fit the encoded request-body limit.
 - Tests use synthetic text and mocked Slack calls. They do not post to a live workspace.
 

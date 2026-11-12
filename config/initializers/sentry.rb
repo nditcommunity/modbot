@@ -13,6 +13,16 @@ Sentry.init do |config|
       event.request.headers = {}
       event.request.env = {}
     end
+    # Rails controller spans include the unfiltered command params by default.
+    if event.respond_to?(:spans)
+      event.spans&.each do |span|
+        span.delete(:data)
+        span.delete("data")
+        span.delete(:description)
+        span.delete("description")
+      end
+    end
+    event.contexts[:trace]&.delete(:data)
     event.breadcrumbs = nil
     event.extra = {}
     event.user = {}

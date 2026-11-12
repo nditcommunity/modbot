@@ -6,13 +6,13 @@
 <title>
   Class: Slack::Client
   
-    &mdash; Documentation by YARD 0.9.36
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "Slack::Client";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -94,27 +96,38 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>app/lib/slack/client.rb</dd>
+    <dd>app/lib/slack/client.rb
+</dd>
   </dl>
   
 </div>
 
+<h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Client/RequestFailed.html" title="Slack::Client::RequestFailed (class)">RequestFailed</a></span>
+    
+  
+</p>
 
-
+  
     <h2>
       Constant Summary
       <small><a href="#" class="constants_summary_toggle">collapse</a></small>
     </h2>
 
     <dl class="constants">
-
+      
         <dt id="SUPPORT_CHANNEL-constant" class="">SUPPORT_CHANNEL =
-
+          
         </dt>
         <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;#C068YBHSJRW&gt;</span><span class='tstring_end'>&quot;</span></span></pre></dd>
-
+      
     </dl>
-
+  
 
 
 
@@ -144,9 +157,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute client.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Returns the value of attribute client.</p></div></span>
   
 </li>
 
@@ -181,9 +192,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Gives user ability to add themselves to a private channel.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Gives user ability to add themselves to a private channel.</p></div></span>
   
 </li>
 
@@ -205,9 +214,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Opens a direct conversation and sends the supplied text or Block Kit message.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Opens a direct conversation and sends the supplied text or Block Kit message.</p></div></span>
   
 </li>
 
@@ -273,14 +280,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Given a user id, channel, and message text, it posts a message to the mod channel.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Given a user id, channel, and message text, it posts a message to the mod channel.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
@@ -300,9 +306,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns the value of attribute client.</p>
-
+    <p>Returns the value of attribute client.</p>
 
   </div>
 </div>
@@ -348,9 +352,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Gives user ability to add themselves to a private channel</p>
-
+    <p>Gives user ability to add themselves to a private channel</p>
 
   </div>
 </div>
@@ -368,9 +370,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>text name of channel (ex: “_general”)</p>
-</div>
+        <div class='inline'><p>text name of channel (ex: &quot;_general&quot;)</p></div>
       
     </li>
   
@@ -384,9 +384,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>slack user id of user who sent the message</p>
-</div>
+        <div class='inline'><p>slack user id of user who sent the message</p></div>
       
     </li>
   
@@ -400,9 +398,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>ID of the channel, ex: “C182938”, found by looking at the URL when viewing a channel through a browser</p>
-</div>
+        <div class='inline'><p>ID of the channel, ex: &quot;C182938&quot;, found by looking at the URL when viewing a channel through a browser</p></div>
       
     </li>
   
@@ -418,9 +414,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the slack web client, defaults to nil</p>
-</div>
+        <div class='inline'><p>the slack web client, defaults to nil</p></div>
       
     </li>
   
@@ -433,8 +427,6 @@
       <pre class="lines">
 
 
-14
-15
 16
 17
 18
@@ -480,21 +472,14 @@
 58
 59
 60
-61
-62
-63
-64
-65
-66
-67
-68</pre>
+61</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 14</span>
+      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 16</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_add_user_to_channel'>add_user_to_channel</span><span class='lparen'>(</span><span class='label'>user_id:</span><span class='comma'>,</span> <span class='label'>channel_id:</span><span class='comma'>,</span> <span class='label'>current_channel_name:</span><span class='comma'>,</span> <span class='label'>channel_name:</span><span class='comma'>,</span> <span class='label'>client:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_client'>client</span> <span class='op'>||=</span> <span class='id identifier rubyid_default_client'>default_client</span> <span class='comment'># if nil, set = to default
-</span>  <span class='id identifier rubyid_channel_name'>channel_name</span> <span class='op'>=</span> <span class='id identifier rubyid_channel_name'>channel_name</span><span class='period'>.</span><span class='id identifier rubyid_strip'>strip</span><span class='period'>.</span><span class='id identifier rubyid_delete_prefix'>delete_prefix</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span><span class='period'>.</span><span class='id identifier rubyid_tr'>tr</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>_</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_delete_prefix'>delete_prefix</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>intersection_</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
+</span>  <span class='id identifier rubyid_channel_name'>channel_name</span> <span class='op'>=</span> <span class='id identifier rubyid_channel_name'>channel_name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_strip'>strip</span><span class='period'>.</span><span class='id identifier rubyid_delete_prefix'>delete_prefix</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span><span class='period'>.</span><span class='id identifier rubyid_tr'>tr</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>_</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_delete_prefix'>delete_prefix</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>intersection_</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
   <span class='kw'>begin</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_channel_name'>channel_name</span> <span class='op'>==</span> <span class='symbol'>:help</span>
       <span class='id identifier rubyid_post_ephemeral'>post_ephemeral</span><span class='lparen'>(</span>
@@ -534,18 +519,9 @@
       <span class='label'>client:</span> <span class='id identifier rubyid_client'>client</span><span class='comma'>,</span>
       <span class='label'>message:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Slack seems to think you are already in that channel! Please check your existing channel list for #</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_channel_name'>channel_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>.</span><span class='tstring_end'>&quot;</span></span>
     <span class='rparen'>)</span>
-  <span class='kw'>rescue</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
-    <span class='id identifier rubyid_post_ephemeral'>post_ephemeral</span><span class='lparen'>(</span>
-      <span class='label'>channel_id:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span>
-      <span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span>
-      <span class='label'>channel_name:</span> <span class='id identifier rubyid_current_channel_name'>current_channel_name</span><span class='comma'>,</span>
-      <span class='label'>client:</span> <span class='id identifier rubyid_client'>client</span><span class='comma'>,</span>
-      <span class='label'>message:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>There was an error! Please check </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_channel_name'>channel_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> against list in help.
-If it looks like a bug, please ask the mods for help in </span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#SUPPORT_CHANNEL-constant" title="Slack::Client::SUPPORT_CHANNEL (constant)">SUPPORT_CHANNEL</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>.
-</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
-    <span class='rparen'>)</span>
-    <span class='id identifier rubyid_raise'>raise</span>
   <span class='kw'>end</span>
+<span class='kw'>rescue</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+  <span class='id identifier rubyid_fail_safely'>fail_safely</span><span class='lparen'>(</span><span class='id identifier rubyid_e'>e</span><span class='comma'>,</span> <span class='label'>channel_id:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span> <span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span> <span class='label'>channel_name:</span> <span class='id identifier rubyid_current_channel_name'>current_channel_name</span><span class='comma'>,</span> <span class='label'>client:</span> <span class='id identifier rubyid_client'>client</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -563,9 +539,7 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Opens a direct conversation and sends the supplied text or Block Kit message</p>
-
+    <p>Opens a direct conversation and sends the supplied text or Block Kit message</p>
 
   </div>
 </div>
@@ -583,9 +557,7 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
       
       
         &mdash;
-        <div class='inline'>
-<p>array of group users, ex: [“U1234”, “U2345”, “U3456”]</p>
-</div>
+        <div class='inline'><p>array of group users, ex: [&quot;U1234&quot;, &quot;U2345&quot;, &quot;U3456&quot;]</p></div>
       
     </li>
   
@@ -601,9 +573,7 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
       
       
         &mdash;
-        <div class='inline'>
-<p>can be passed in, must follow the Slack Block Kit format, defaults to nil</p>
-</div>
+        <div class='inline'><p>can be passed in, must follow the Slack Block Kit format, defaults to nil</p></div>
       
     </li>
   
@@ -616,6 +586,13 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
       <pre class="lines">
 
 
+86
+87
+88
+89
+90
+91
+92
 93
 94
 95
@@ -623,17 +600,10 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
 97
 98
 99
-100
-101
-102
-103
-104
-105
-106
-107</pre>
+100</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 93</span>
+      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 86</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_conversation'>create_conversation</span><span class='lparen'>(</span><span class='label'>group:</span><span class='comma'>,</span> <span class='label'>text:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>client:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_client'>client</span> <span class='op'>||=</span> <span class='id identifier rubyid_default_client'>default_client</span>
@@ -670,12 +640,12 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
       <pre class="lines">
 
 
-149
-150
-151</pre>
+147
+148
+149</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 149</span>
+      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 147</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_default_client'>default_client</span>
   <span class='op'>::</span><span class='const'><span class='object_link'><a href="../Slack.html" title="Slack (module)">Slack</a></span></span><span class='op'>::</span><span class='const'>Web</span><span class='op'>::</span><span class='const'>Client</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='label'>token:</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>SLACK_OAUTH_TOKEN</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -700,6 +670,13 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
       <pre class="lines">
 
 
+63
+64
+65
+66
+67
+68
+69
 70
 71
 72
@@ -710,17 +687,10 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
 77
 78
 79
-80
-81
-82
-83
-84
-85
-86
-87</pre>
+80</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 63</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_post_ephemeral'>post_ephemeral</span><span class='lparen'>(</span><span class='label'>channel_id:</span><span class='comma'>,</span> <span class='label'>user_id:</span><span class='comma'>,</span> <span class='label'>channel_name:</span><span class='comma'>,</span> <span class='label'>client:</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>blocks:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_channel_name'>channel_name</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>directmessage</span><span class='tstring_end'>&quot;</span></span>
@@ -756,9 +726,7 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Given a user id, channel, and message text, it posts a message to the mod channel.</p>
-
+    <p>Given a user id, channel, and message text, it posts a message to the mod channel.</p>
 
   </div>
 </div>
@@ -776,9 +744,7 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
       
       
         &mdash;
-        <div class='inline'>
-<p>slack user id of user who sent the message</p>
-</div>
+        <div class='inline'><p>slack user id of user who sent the message</p></div>
       
     </li>
   
@@ -792,9 +758,7 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
       
       
         &mdash;
-        <div class='inline'>
-<p>slack channel id where the user initially typed /mods</p>
-</div>
+        <div class='inline'><p>slack channel id where the user initially typed /mods</p></div>
       
     </li>
   
@@ -808,9 +772,7 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
       
       
         &mdash;
-        <div class='inline'>
-<p>slack channel name where user initially reached out to /mods</p>
-</div>
+        <div class='inline'><p>slack channel name where user initially reached out to /mods</p></div>
       
     </li>
   
@@ -824,9 +786,7 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
       
       
         &mdash;
-        <div class='inline'>
-<p>message text from user to mods</p>
-</div>
+        <div class='inline'><p>message text from user to mods</p></div>
       
     </li>
   
@@ -839,6 +799,13 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
       <pre class="lines">
 
 
+108
+109
+110
+111
+112
+113
+114
 115
 116
 117
@@ -854,25 +821,10 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
 127
 128
 129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
-141
-142
-143
-144
-145</pre>
+130</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 115</span>
+      <pre class="code"><span class="info file"># File 'app/lib/slack/client.rb', line 108</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_send_mod_message'>send_mod_message</span><span class='lparen'>(</span><span class='label'>user_id:</span><span class='comma'>,</span> <span class='label'>channel_id:</span><span class='comma'>,</span> <span class='label'>channel_name:</span><span class='comma'>,</span> <span class='label'>text:</span><span class='comma'>,</span> <span class='label'>client:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_client'>client</span> <span class='op'>||=</span> <span class='id identifier rubyid_default_client'>default_client</span>
@@ -894,15 +846,7 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
       <span class='label'>message:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Your message has been sent to the mods.</span><span class='tstring_end'>&quot;</span></span>
     <span class='rparen'>)</span>
   <span class='kw'>rescue</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
-    <span class='id identifier rubyid_post_ephemeral'>post_ephemeral</span><span class='lparen'>(</span>
-      <span class='label'>channel_id:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span>
-      <span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span>
-      <span class='label'>channel_name:</span> <span class='id identifier rubyid_channel_name'>channel_name</span><span class='comma'>,</span>
-      <span class='label'>client:</span> <span class='id identifier rubyid_client'>client</span><span class='comma'>,</span>
-      <span class='label'>message:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>There was an error! Please ask the mods for help in </span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#SUPPORT_CHANNEL-constant" title="Slack::Client::SUPPORT_CHANNEL (constant)">SUPPORT_CHANNEL</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>.
-</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
-    <span class='rparen'>)</span>
-    <span class='id identifier rubyid_raise'>raise</span>
+    <span class='id identifier rubyid_fail_safely'>fail_safely</span><span class='lparen'>(</span><span class='id identifier rubyid_e'>e</span><span class='comma'>,</span> <span class='label'>channel_id:</span> <span class='id identifier rubyid_channel_id'>channel_id</span><span class='comma'>,</span> <span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='comma'>,</span> <span class='label'>channel_name:</span> <span class='id identifier rubyid_channel_name'>channel_name</span><span class='comma'>,</span> <span class='label'>client:</span> <span class='id identifier rubyid_client'>client</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -915,9 +859,9 @@ If it looks like a bug, please ask the mods for help in </span><span class='embe
 </div>
 
       <div id="footer">
-  Generated on Wed Nov 11 18:23:43 2026 by
+  Generated on Wed Nov 11 18:57:27 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.36 (ruby-3.3.1).
+  0.9.45 (ruby-3.3.1).
 </div>
 
     </div>

@@ -6,13 +6,13 @@
 <title>
   Class: ModController
   
-    &mdash; Documentation by YARD 0.9.36
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" />
+  <link rel="stylesheet" href="css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" />
+  <link rel="stylesheet" href="css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "ModController";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -91,6 +93,11 @@
   
   
   
+  <dl>
+      <dt>Includes:</dt>
+      <dd><span class='object_link'><a href="SlackWebhook.html" title="SlackWebhook (module)">SlackWebhook</a></span></dd>
+  </dl>
+  
   
 
   
@@ -98,16 +105,15 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>app/controllers/mod_controller.rb</dd>
+    <dd>app/controllers/mod_controller.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>Accepts webhooks from slack to post messages from users to the mod channel</p>
-
+    <p>Accepts webhooks from slack to post messages from users to the mod channel</p>
 
   </div>
 </div>
@@ -146,41 +152,25 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Takes in params from webhook and sends a message to the mod channel.</p>
-</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#verify_webhook_signature-instance_method" title="#verify_webhook_signature (instance method)">#<strong>verify_webhook_signature</strong>  &#x21d2; Status Code </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Validates that webhook actually comes from slack.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Takes in params from webhook and sends a message to the mod channel.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
@@ -209,9 +199,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Takes in params from webhook and sends a message to the mod channel</p>
-
+    <p>Takes in params from webhook and sends a message to the mod channel</p>
 
   </div>
 </div>
@@ -228,9 +216,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>should return a 202</p>
-</div>
+        <div class='inline'><p>should return a 202</p></div>
       
     </li>
   
@@ -242,6 +228,7 @@
       <pre class="lines">
 
 
+8
 9
 10
 11
@@ -251,12 +238,17 @@
 15
 16
 17
-18</pre>
+18
+19
+20</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/mod_controller.rb', line 9</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/mod_controller.rb', line 8</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create'>create</span>
+  <span class='id identifier rubyid_text'>text</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:text</span><span class='rbracket'>]</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_head'>head</span><span class='lparen'>(</span><span class='symbol'>:bad_request</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_text'>text</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>String</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_text'>text</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_text'>text</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>&lt;=</span> <span class='int'>12_000</span>
+
   <span class='const'><span class='object_link'><a href="Slack.html" title="Slack (module)">Slack</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Slack/Client.html" title="Slack::Client (class)">Client</a></span></span><span class='period'>.</span><span class='id identifier rubyid_send_mod_message'><span class='object_link'><a href="Slack/Client.html#send_mod_message-class_method" title="Slack::Client.send_mod_message (method)">send_mod_message</a></span></span><span class='lparen'>(</span>
     <span class='label'>user_id:</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:user_id</span><span class='rbracket'>]</span><span class='comma'>,</span>
     <span class='label'>channel_id:</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:channel_id</span><span class='rbracket'>]</span><span class='comma'>,</span>
@@ -271,75 +263,14 @@
 </table>
 </div>
     
-      <div class="method_details ">
-  <h3 class="signature " id="verify_webhook_signature-instance_method">
-  
-    #<strong>verify_webhook_signature</strong>  &#x21d2; <tt>Status Code</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Validates that webhook actually comes from slack</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Status Code</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>403 if not verified</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-23
-24
-25
-26</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/mod_controller.rb', line 23</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_verify_webhook_signature'>verify_webhook_signature</span>
-  <span class='id identifier rubyid_slack_request'>slack_request</span> <span class='op'>=</span> <span class='op'>::</span><span class='const'><span class='object_link'><a href="Slack.html" title="Slack (module)">Slack</a></span></span><span class='op'>::</span><span class='const'>Events</span><span class='op'>::</span><span class='const'>Request</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_request'>request</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_head'>head</span> <span class='symbol'>:forbidden</span> <span class='kw'>unless</span> <span class='id identifier rubyid_slack_request'>slack_request</span><span class='period'>.</span><span class='id identifier rubyid_verify!'>verify!</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
   </div>
 
 </div>
 
       <div id="footer">
-  Generated on Wed Nov 11 18:23:43 2026 by
+  Generated on Wed Nov 11 18:57:27 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.36 (ruby-3.3.1).
+  0.9.45 (ruby-3.3.1).
 </div>
 
     </div>

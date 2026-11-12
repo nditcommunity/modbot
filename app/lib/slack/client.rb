@@ -55,9 +55,9 @@ module Slack
           client: client,
           message: "Slack seems to think you are already in that channel! Please check your existing channel list for ##{channel_name}."
         )
-      rescue => e
-        fail_safely(e, channel_id: channel_id, user_id: user_id, channel_name: current_channel_name, client: client)
       end
+    rescue => e
+      fail_safely(e, channel_id: channel_id, user_id: user_id, channel_name: current_channel_name, client: client)
     end
 
     def self.post_ephemeral(channel_id:, user_id:, channel_name:, client:, message: nil, blocks: nil)
