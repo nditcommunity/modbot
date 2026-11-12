@@ -54,9 +54,9 @@ For local development, `dotenv-rails` can load these from a gitignored `.env` fi
 
 Before using this application in another workspace, review:
 
-- [`SlackMessage::CHANNELS`](app/models/slack_message.rb): private-channel IDs and descriptions used for invitations and help text.
-- [`Slack::Client::SUPPORT_CHANNEL`](app/lib/slack/client.rb): the channel link in error messages, currently NDIT's `#ndit-meta`.
-- [`config/initializers/sentry.rb`](config/initializers/sentry.rb): the production Sentry destination and sampling configuration. Replace or remove the existing project destination before deploying a fork. Production tracing currently samples all transactions; development and test reports are disabled.
+- [`SlackMessage::CHANNELS`](https://github.com/nditcommunity/slack-bot/blob/main/app/models/slack_message.rb): private-channel IDs and descriptions used for invitations and help text.
+- [`Slack::Client::SUPPORT_CHANNEL`](https://github.com/nditcommunity/slack-bot/blob/main/app/lib/slack/client.rb): the channel link in error messages, currently NDIT's `#ndit-meta`.
+- [`config/initializers/sentry.rb`](https://github.com/nditcommunity/slack-bot/blob/main/config/initializers/sentry.rb): the production Sentry destination and sampling configuration. Replace or remove the existing project destination before deploying a fork. Production tracing currently samples all transactions; development and test reports are disabled.
 
 ## Running locally
 
@@ -70,8 +70,8 @@ The server runs at `http://localhost:3000`. Slack must reach a public HTTPS URL 
 
 ## Installing and deploying the Slack app
 
-1. [Create a Slack app](https://api.slack.com/apps). Use [`.slack_manifest.yml`](.slack_manifest.yml) as a starting point, updating its name for your workspace.
-2. Review OAuth scopes. The manifest currently includes `users:read`, `im:write`, `chat:write`, `channels:join`, `channels:manage`, `groups:write`, `groups:read`, `im:read`, and `channels:read`. It does not include `commands` or define the slash commands. Add the slash-command capability and configure both commands below in the app settings. These existing scopes are not a validated minimum; see the [permission review](SECURITY.md#slack-permission-review) before changing installed grants.
+1. [Create a Slack app](https://api.slack.com/apps). Use [`.slack_manifest.yml`](https://github.com/nditcommunity/slack-bot/blob/main/.slack_manifest.yml) as a starting point, updating its name for your workspace.
+2. Review OAuth scopes. The manifest currently includes `users:read`, `im:write`, `chat:write`, `channels:join`, `channels:manage`, `groups:write`, `groups:read`, `im:read`, and `channels:read`. It does not include `commands` or define the slash commands. Add the slash-command capability and configure both commands below in the app settings. These existing scopes are not a validated minimum; see the [permission review](https://github.com/nditcommunity/slack-bot/blob/main/SECURITY.md#slack-permission-review) before changing installed grants.
 3. Install the app to the intended workspace and use its bot user OAuth token for `SLACK_OAUTH_TOKEN`. Reinstall it if approved scope changes require new grants.
 4. Add the bot to the moderator channel and each private channel it is configured to invite members to. An account's membership does not give the bot membership.
 5. Deploy the Rails application to Heroku or another Ruby-compatible host. Set the four environment variables above, use `RAILS_ENV=production`, and expose the application over HTTPS.
@@ -93,7 +93,7 @@ The GitHub Pages workflow publishes API documentation only. It does not deploy t
 - Moderator reports must be nonblank and at most 12,000 characters, while fitting the encoded body limit. Invalid report text returns `400`.
 - Report content is displayed as literal plain text. Command text and response URLs are filtered from logs and Sentry reports.
 
-See [SECURITY.md](SECURITY.md) for the security checks, privacy protections, deployment requirements, and Slack permission review.
+See [SECURITY.md](https://github.com/nditcommunity/slack-bot/blob/main/SECURITY.md) for the security checks, privacy protections, deployment requirements, and Slack permission review.
 
 ## Tests and checks
 
@@ -121,7 +121,7 @@ These values are for the boot check only, not a live deployment. Automated tests
 
 Use `bundle exec standardrb --fix` only when you want the linter to modify source files. Review its changes before committing.
 
-The [Ruby workflow](.github/workflows/ruby.yml) runs lint, tests, eager loading, production boot, dependency auditing, and Brakeman. [CodeQL](.github/workflows/codeql.yml) provides a separate analysis. Check the results for the latest PR commit before merging.
+The [Ruby workflow](https://github.com/nditcommunity/slack-bot/blob/main/.github/workflows/ruby.yml) runs lint, tests, eager loading, production boot, dependency auditing, and Brakeman. [CodeQL](https://github.com/nditcommunity/slack-bot/blob/main/.github/workflows/codeql.yml) provides a separate analysis. Check the results for the latest PR commit before merging.
 
 ## Updating dependencies
 
@@ -137,6 +137,6 @@ bundle exec yard doc --no-cache --asset assets --output-dir tmp/api-docs 'app/**
 
 Open `tmp/api-docs/index.html` to view it. This output is gitignored.
 
-The [Pages workflow](.github/workflows/static.yml) generates documentation from the current source in a clean temporary directory, checks the generated pages, and uploads the artifact. It does not publish the committed `doc/` snapshot. Pull requests build and validate the documentation without deploying it. Pushes to `main`, or a manual workflow run on `main`, also run deployment.
+The [Pages workflow](https://github.com/nditcommunity/slack-bot/blob/main/.github/workflows/static.yml) generates documentation from the current source in a clean temporary directory, checks the generated pages, and uploads the artifact. It does not publish the committed `doc/` snapshot. Pull requests build and validate the documentation without deploying it. Pushes to `main`, or a manual workflow run on `main`, also run deployment.
 
 To publish a repository's documentation, set **Settings → Pages → Build and deployment → Source** to **GitHub Actions**. After deployment succeeds, use the URL shown by the `github-pages` environment or the deploy job. A successful documentation build alone does not confirm that the site is published.
